@@ -1,4 +1,4 @@
-namespace LAAuto.web.Models
+namespace LAAuto.Web.Models
 {
     public class ErrorViewModel
     {

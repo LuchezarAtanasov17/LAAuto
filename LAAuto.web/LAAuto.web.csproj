@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-LAAuto.web-1F7B4107-D9D0-46C4-8ABB-C2A642DBB23D</UserSecretsId>
+    <UserSecretsId>aspnet-LAAuto.Web-1F7B4107-D9D0-46C4-8ABB-C2A642DBB23D</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +13,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LAAuto.Entities\LAAuto.Entities.csproj" />
+    <ProjectReference Include="..\LAAuto.Identity\LAAuto.Identity.csproj" />
+    <ProjectReference Include="..\LAAuto.Services.Impl\LAAuto.Services.Impl.csproj" />
+    <ProjectReference Include="..\LAAuto.Services\LAAuto.Services.csproj" />
   </ItemGroup>
 
 </Project>
