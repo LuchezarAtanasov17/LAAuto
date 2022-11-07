@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LAAuto.Entities\LAAuto.Entities.csproj" />
     <ProjectReference Include="..\LAAuto.Services\LAAuto.Services.csproj" />
   </ItemGroup>
 
