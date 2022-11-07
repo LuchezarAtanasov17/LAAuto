@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LAAuto.Entities\LAAuto.Entities.csproj" />
-    <ProjectReference Include="..\LAAuto.Identity\LAAuto.Identity.csproj" />
     <ProjectReference Include="..\LAAuto.Services.Impl\LAAuto.Services.Impl.csproj" />
     <ProjectReference Include="..\LAAuto.Services\LAAuto.Services.csproj" />
   </ItemGroup>
