@@ -1,4 +1,5 @@
-﻿using LAAuto.Entities.Models;
+﻿using LAAuto.Entities.Data.Configuration;
+using LAAuto.Entities.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,8 +14,6 @@ namespace LAAuto.Entities.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             var timeOnlyToTimeSpanConverter = new TimeOnlyToTimeSpanConverter();
 
             modelBuilder.Entity<Service>(builder =>
@@ -25,7 +24,6 @@ namespace LAAuto.Entities.Data
                 builder.Property(x => x.CloseTime)
                     .HasConversion(timeOnlyToTimeSpanConverter);
             });
-
             modelBuilder.Entity<CategoryService>(builder =>
             {
                 builder.HasKey(cs => new { cs.CategoryId, cs.ServiceId });
@@ -38,6 +36,15 @@ namespace LAAuto.Entities.Data
                     .WithMany(x => x.CategoryServices)
                     .HasForeignKey(x => x.ServiceId);
             });
+
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientConfiguration());
+            modelBuilder.ApplyConfiguration(new OwnerConfiguration());
+            modelBuilder.ApplyConfiguration(new RatingConfiguration());
+            modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Appointment> Appointments { get; set; }

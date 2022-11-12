@@ -33,6 +33,8 @@ namespace LAAuto.Entities.Models
         [ForeignKey(nameof(OwnerId))]
         public Owner Owner { get; set; }
 
+//      public string Picture { get; set; } Ако снимката е растерна може да си го запиша като стринг и след това в базата само си го конвертира, може и като масив от байтове
+
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
 
         public ICollection<Category> Categories { get; set; } = new HashSet<Category>();
