@@ -1,5 +1,6 @@
 ﻿using LAAuto.Services.Services;
 using ENTITIES = LAAuto.Entities.Models;
+using SERVICES_IMPL_USERS = LAAuto.Services.Impl.Users;
 
 namespace LAAuto.Services.Impl.Services
 {
@@ -15,13 +16,14 @@ namespace LAAuto.Services.Impl.Services
             var target = new Service()
             {
                 Id = source.Id,
-                OwnerId = source.OwnerId,
+                UserId = source.UserId,
                 Name = source.Name,
                 OpenTime = source.OpenTime,
                 CloseTime = source.CloseTime,
                 Location = source.Location,
                 Description = source.Description,
-                // TODO: Owner = 
+                User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
+                //TODO: AverageRating
             };
 
             return target;
@@ -36,7 +38,7 @@ namespace LAAuto.Services.Impl.Services
 
             var target = new ENTITIES.Service()
             {
-                OwnerId = source.OwnerId,
+                UserId = source.OwnerId,
                 Name = source.Name,
                 OpenTime = source.OpenTime,
                 CloseTime = source.CloseTime,

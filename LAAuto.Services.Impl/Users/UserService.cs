@@ -1,69 +1,69 @@
 ﻿using LAAuto.Entities.Data;
-using LAAuto.Services.Clients;
+using LAAuto.Services.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace LAAuto.Services.Impl.Clients
+namespace LAAuto.Services.Impl.Users
 {
-    public class ClientService : IClientService
+    public class UserService : IUserService
     {
         private readonly ApplicationDbContext _context;
 
-        public ClientService(ApplicationDbContext context)
+        public UserService(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<List<Client>> ListCategoriesAsync()
+        public async Task<List<User>> ListUsersAsync()
         {
-            var entities = await _context.Clients.ToListAsync();
+            var entities = await _context.Users.ToListAsync();
 
-            var clients = entities
-                .Select(Conversion.ConvertClients)
+            var users = entities
+                .Select(Conversion.ConvertUser)
                 .ToList();
 
-            return clients;
+            return users;
         }
 
-        public async Task<Client> GetCategoryAsync(Guid id)
+        public async Task<User> GetUserAsync(Guid id)
         {
-            var entity = await _context.Clients
+            var entity = await _context.Users
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity is null)
             {
-                throw new ObjectNotFoundException($"Could not find client with ID {id}.");
+                throw new ObjectNotFoundException($"Could not find a user with ID {id}.");
             }
 
-            var client = Conversion.ConvertClients(entity);
+            var user = Conversion.ConvertUser(entity);
 
-            return client;
+            return user;
         }
 
-        public async Task CreateClientService(CreateClientRequest request)
+        public async Task CreateUserAsync(CreateUserRequest request)
         {
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var entity = Conversion.ConvertClients(request);
+            var entity = Conversion.ConvertUser(request);
             
-            await _context.Clients.AddAsync(entity);
+            await _context.Users.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateClientService(Guid id, UpdateClientRequest request)
+        public async Task UpdateUserAsync(Guid id, UpdateUserRequest request)
         {
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var entity = await _context.Clients.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity is null)
             {
-                throw new ObjectNotFoundException($"Could not find client with ID {id}.");
+                throw new ObjectNotFoundException($"Could not find a user with ID {id}.");
             }
 
             entity.FirstName = request.FirstName;
@@ -74,6 +74,5 @@ namespace LAAuto.Services.Impl.Clients
 
             await _context.SaveChangesAsync();
         }
-
     }
 }

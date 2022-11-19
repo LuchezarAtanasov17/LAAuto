@@ -10,7 +10,7 @@ namespace LAAuto.Entities.Models
         public Guid Id { get; set; }
         
         [Required]
-        public Guid ClientId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         public Guid ServiceId { get; set; }
@@ -19,11 +19,9 @@ namespace LAAuto.Entities.Models
         public int Value { get; set; }
 
         [Required]
-        [ForeignKey(nameof(ClientId))]
-        public Client Client { get; set; }
+        public User User { get; set; }
 
         [Required]
-        [ForeignKey(nameof(ServiceId))]
         public Service Service { get; set; }
     }
 }

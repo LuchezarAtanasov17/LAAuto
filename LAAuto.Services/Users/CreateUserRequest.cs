@@ -1,7 +1,9 @@
-﻿namespace LAAuto.Services.Clients
+﻿namespace LAAuto.Services.Users
 {
-    public class UpdateClientRequest
+    public class CreateUserRequest
     {
+        public Guid Id { get; set; }
+
         public string UserName { get; set; } = null!;
 
         public string FirstName { get; set; } = null!;

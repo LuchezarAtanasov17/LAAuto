@@ -4,20 +4,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LAAuto.Entities.Models
 {
-    public class Owner : IdentityUser<Guid>
+    public class User : IdentityUser<Guid>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [Required]
         [StringLength(30)]
-        public string FirstName { get; set; } = null!;
+        public string? FirstName { get; set; }
 
-        [Required]
         [StringLength(30)]
-        public string LastName { get; set; } = null!;
+        public string? LastName { get; set; }
+
+        public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
 
         public ICollection<Service> Services { get; set; } = new HashSet<Service>();
+
+        public ICollection<Rating> Ratings { get; set; } = new HashSet<Rating>();
     }
 }

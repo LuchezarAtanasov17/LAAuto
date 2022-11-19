@@ -70,7 +70,7 @@ namespace LAAuto.Services.Impl.Services
                 throw new ObjectNotFoundException($"Could not find service with ID {id}.");
             }
 
-            entity.OwnerId = request.OwnerId;
+            entity.UserId = request.OwnerId;
             entity.Name = request.Name;
             entity.OpenTime = request.OpenTime;
             entity.CloseTime = request.CloseTime;

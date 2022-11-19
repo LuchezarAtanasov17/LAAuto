@@ -16,14 +16,51 @@ namespace LAAuto.Entities.Data
         {
             var timeOnlyToTimeSpanConverter = new TimeOnlyToTimeSpanConverter();
 
+            modelBuilder.Entity<Appointment>(builder =>
+            {
+                builder.HasOne(x => x.Service)
+                    .WithMany(x => x.Appointments)
+                    .HasForeignKey(x => x.ServiceId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                builder.HasOne(x => x.User)
+                    .WithMany(x => x.Appointments)
+                    .HasForeignKey(x => x.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                builder.HasOne(x => x.Category)
+                    .WithMany(x => x.Appointments)
+                    .HasForeignKey(x => x.CategoryId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Rating>(builder =>
+            {
+                builder.HasOne(x => x.Service)
+                    .WithMany(x => x.Ratings)
+                    .HasForeignKey(x => x.ServiceId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                builder.HasOne(x => x.User)
+                    .WithMany(x => x.Ratings)
+                    .HasForeignKey(x => x.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
             modelBuilder.Entity<Service>(builder =>
             {
                 builder.Property(x => x.OpenTime)
                     .HasConversion(timeOnlyToTimeSpanConverter);
-
+                
                 builder.Property(x => x.CloseTime)
                     .HasConversion(timeOnlyToTimeSpanConverter);
+
+                builder.HasOne(x => x.User)
+                    .WithMany(x => x.Services)
+                    .HasForeignKey(x => x.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
+
             modelBuilder.Entity<CategoryService>(builder =>
             {
                 builder.HasKey(cs => new { cs.CategoryId, cs.ServiceId });
@@ -39,8 +76,7 @@ namespace LAAuto.Entities.Data
 
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new ClientConfiguration());
-            modelBuilder.ApplyConfiguration(new OwnerConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RatingConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
 
@@ -51,9 +87,7 @@ namespace LAAuto.Entities.Data
 
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<Client> Clients { get; set; }
-
-        public DbSet<Owner> Owners { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DbSet<Rating> Ratings { get; set; }
 

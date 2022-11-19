@@ -10,7 +10,7 @@ namespace LAAuto.Entities.Models
         public Guid Id { get; set; }
 
         [Required]
-        public Guid OwnerId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -30,8 +30,7 @@ namespace LAAuto.Entities.Models
         public TimeOnly CloseTime { get; set; }
 
         [Required]
-        [ForeignKey(nameof(OwnerId))]
-        public Owner Owner { get; set; }
+        public User User { get; set; }
 
 //      public string Picture { get; set; } Ако снимката е растерна може да си го запиша като стринг и след това в базата само си го конвертира, може и като масив от байтове
 

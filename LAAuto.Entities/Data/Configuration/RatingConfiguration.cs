@@ -16,7 +16,7 @@ namespace LAAuto.Entities.Data.Configuration
             builder.HasData(new Rating()
             {
                 Id = Guid.Parse("eecdc117-7fbe-4c46-bbf9-8507b45c0d88"),
-                ClientId = Guid.Parse("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
+                UserId = Guid.Parse("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                 ServiceId = Guid.Parse("e17b327f-eee6-4011-9905-bc8360cd5e66"),
                 Value = 4
             });

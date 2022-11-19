@@ -46,9 +46,6 @@ namespace LAAuto.Entities.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Description")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -62,13 +59,16 @@ namespace LAAuto.Entities.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("ServiceId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Appointments");
 
@@ -77,10 +77,10 @@ namespace LAAuto.Entities.Migrations
                         {
                             Id = new Guid("9d8afaca-f28c-4fce-bc14-5c3363633323"),
                             CategoryId = new Guid("7294f257-a657-4797-8fce-272319ade2f9"),
-                            ClientId = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                             EndDate = new DateTime(2022, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ServiceId = new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"),
-                            StartDate = new DateTime(2022, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateTime(2022, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2")
                         });
                 });
 
@@ -136,178 +136,16 @@ namespace LAAuto.Entities.Migrations
                     b.ToTable("CategoryServices");
                 });
 
-            modelBuilder.Entity("LAAuto.Entities.Models.Client", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Clients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "4c0068b9-15b8-458b-afa3-4f9bd17e59a6",
-                            Email = "client@mail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Pesho",
-                            LastName = "Peshov",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "CLIENT@MAIL.COM",
-                            NormalizedUserName = "CLIENT",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserName = "Client"
-                        });
-                });
-
-            modelBuilder.Entity("LAAuto.Entities.Models.Owner", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Owners");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("95a9873f-d6f4-4496-bf75-62be88716460"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "ecb0a22a-5143-434d-bc54-5e804eeca3b8",
-                            Email = "owner@mail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Ivan",
-                            LastName = "Ivanov",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "OWNER@MAIL.COM",
-                            NormalizedUserName = "OWNER",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserName = "Owner"
-                        });
-                });
-
             modelBuilder.Entity("LAAuto.Entities.Models.Rating", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClientId")
+                    b.Property<Guid>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ServiceId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Value")
@@ -315,9 +153,9 @@ namespace LAAuto.Entities.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("ServiceId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
 
@@ -325,8 +163,8 @@ namespace LAAuto.Entities.Migrations
                         new
                         {
                             Id = new Guid("eecdc117-7fbe-4c46-bbf9-8507b45c0d88"),
-                            ClientId = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                             ServiceId = new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"),
+                            UserId = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                             Value = 4
                         });
                 });
@@ -357,12 +195,12 @@ namespace LAAuto.Entities.Migrations
                     b.Property<TimeSpan>("OpenTime")
                         .HasColumnType("time");
 
-                    b.Property<Guid>("OwnerId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Services");
 
@@ -374,7 +212,7 @@ namespace LAAuto.Entities.Migrations
                             Location = "Гр.София, кв.Надежда, ул.Стамболийски 36",
                             Name = "Carx",
                             OpenTime = new TimeSpan(0, 9, 0, 0, 0),
-                            OwnerId = new Guid("95a9873f-d6f4-4496-bf75-62be88716460")
+                            UserId = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2")
                         },
                         new
                         {
@@ -383,7 +221,7 @@ namespace LAAuto.Entities.Migrations
                             Location = "Гр.Пловдив, кв.Кичука, ул.Македония 12",
                             Name = "Autox",
                             OpenTime = new TimeSpan(0, 8, 0, 0, 0),
-                            OwnerId = new Guid("95a9873f-d6f4-4496-bf75-62be88716460")
+                            UserId = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2")
                         },
                         new
                         {
@@ -392,7 +230,86 @@ namespace LAAuto.Entities.Migrations
                             Location = "Гр.Varna, кв.Владиславово, ул.Георги Минков 3",
                             Name = "CarKing",
                             OpenTime = new TimeSpan(0, 10, 0, 0, 0),
-                            OwnerId = new Guid("95a9873f-d6f4-4496-bf75-62be88716460")
+                            UserId = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2")
+                        });
+                });
+
+            modelBuilder.Entity("LAAuto.Entities.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7e0edec9-616e-46a1-96b5-0e6198574f3e",
+                            Email = "client@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Pesho",
+                            LastName = "Peshov",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "CLIENT@MAIL.COM",
+                            NormalizedUserName = "CLIENT",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "User"
                         });
                 });
 
@@ -621,23 +538,23 @@ namespace LAAuto.Entities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LAAuto.Entities.Models.Client", "Client")
-                        .WithMany("Appointments")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LAAuto.Entities.Models.Service", "Service")
                         .WithMany("Appointments")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LAAuto.Entities.Models.User", "User")
+                        .WithMany("Appointments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Category");
 
-                    b.Navigation("Client");
-
                     b.Navigation("Service");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LAAuto.Entities.Models.CategoryService", b =>
@@ -661,32 +578,32 @@ namespace LAAuto.Entities.Migrations
 
             modelBuilder.Entity("LAAuto.Entities.Models.Rating", b =>
                 {
-                    b.HasOne("LAAuto.Entities.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LAAuto.Entities.Models.Service", "Service")
                         .WithMany("Ratings")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.HasOne("LAAuto.Entities.Models.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Service");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LAAuto.Entities.Models.Service", b =>
                 {
-                    b.HasOne("LAAuto.Entities.Models.Owner", "Owner")
+                    b.HasOne("LAAuto.Entities.Models.User", "User")
                         .WithMany("Services")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -747,16 +664,6 @@ namespace LAAuto.Entities.Migrations
                     b.Navigation("CategoryServices");
                 });
 
-            modelBuilder.Entity("LAAuto.Entities.Models.Client", b =>
-                {
-                    b.Navigation("Appointments");
-                });
-
-            modelBuilder.Entity("LAAuto.Entities.Models.Owner", b =>
-                {
-                    b.Navigation("Services");
-                });
-
             modelBuilder.Entity("LAAuto.Entities.Models.Service", b =>
                 {
                     b.Navigation("Appointments");
@@ -764,6 +671,15 @@ namespace LAAuto.Entities.Migrations
                     b.Navigation("CategoryServices");
 
                     b.Navigation("Ratings");
+                });
+
+            modelBuilder.Entity("LAAuto.Entities.Models.User", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Ratings");
+
+                    b.Navigation("Services");
                 });
 #pragma warning restore 612, 618
         }

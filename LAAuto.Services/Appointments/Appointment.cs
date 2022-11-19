@@ -1,5 +1,5 @@
 ﻿using LAAuto.Services.Categories;
-using LAAuto.Services.Clients;
+using LAAuto.Services.Users;
 using LAAuto.Services.Services;
 
 namespace LAAuto.Services.Appointments
@@ -21,7 +21,7 @@ namespace LAAuto.Services.Appointments
         public string? Description { get; set; }
 
         public Service Service { get; set; }
-        public Client Client { get; set; }
+        public User User { get; set; }
         public Category Category { get; set; }
     }
 }

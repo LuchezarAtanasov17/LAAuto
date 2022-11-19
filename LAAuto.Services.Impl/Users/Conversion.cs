@@ -1,43 +1,44 @@
-﻿using LAAuto.Services.Owners;
+﻿using LAAuto.Services.Users;
 using ENTITIES = LAAuto.Entities.Models;
 
-namespace LAAuto.Services.Impl.Owners
+namespace LAAuto.Services.Impl.Users
 {
     public static class Conversion
     {
-        public static Owner ConvertOwner(ENTITIES.Owner source)
+        public static User ConvertUser(ENTITIES.User source)
         {
             if (source is null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            var target = new Owner()
+            var target = new User()
             {
-                Id = source.Id,
-                Username = source.UserName,
+                UserName = source.UserName,
                 FirstName = source.FirstName,
                 LastName = source.LastName,
+                Email = source.Email,
                 PhoneNumber = source.PhoneNumber,
             };
 
             return target;
         }
 
-        public static ENTITIES.Client ConvertOwner(CreateOwnerRequest source)
+        public static ENTITIES.User ConvertUser(CreateUserRequest source)
         {
             if (source is null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            var target = new ENTITIES.Client()
+            var target = new ENTITIES.User()
             {
-                UserName = source.Username,
+                UserName = source.UserName,
                 FirstName = source.FirstName,
                 LastName = source.LastName,
                 PhoneNumber = source.PhoneNumber,
-                NormalizedUserName = source.Username.ToUpper(),
+                Email = source.Email,
+                NormalizedUserName = source.UserName.ToUpper()
             };
 
             return target;

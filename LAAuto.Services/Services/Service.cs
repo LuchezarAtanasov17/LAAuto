@@ -1,4 +1,4 @@
-﻿using LAAuto.Services.Owners;
+﻿using LAAuto.Services.Users;
 
 namespace LAAuto.Services.Services
 {
@@ -6,7 +6,7 @@ namespace LAAuto.Services.Services
     {
         public Guid Id { get; set; }
 
-        public Guid OwnerId { get; set; }
+        public Guid UserId { get; set; }
 
         public string Name { get; set; } = null!;
 
@@ -20,6 +20,6 @@ namespace LAAuto.Services.Services
 
         public double AverageRating { get; set; }
 
-        public Owner Owner { get; set; }
+        public User User { get; set; }
     }
 }

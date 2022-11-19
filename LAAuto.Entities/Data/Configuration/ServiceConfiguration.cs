@@ -18,7 +18,7 @@ namespace LAAuto.Entities.Data.Configuration
             Service service = new()
             {
                 Id = Guid.Parse("e17b327f-eee6-4011-9905-bc8360cd5e66"),
-                OwnerId = Guid.Parse("95a9873f-d6f4-4496-bf75-62be88716460"),
+                UserId = Guid.Parse("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                 Name = "Carx",
                 Location = "Гр.София, кв.Надежда, ул.Стамболийски 36",
                 OpenTime = TimeOnly.Parse("9:00:00"),
@@ -29,7 +29,7 @@ namespace LAAuto.Entities.Data.Configuration
             service = new Service()
             {
                 Id = Guid.Parse("9226a3f4-35aa-4817-adcd-1c033cf739ad"),
-                OwnerId = Guid.Parse("95a9873f-d6f4-4496-bf75-62be88716460"),
+                UserId = Guid.Parse("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                 Name = "Autox",
                 Location = "Гр.Пловдив, кв.Кичука, ул.Македония 12",
                 OpenTime = TimeOnly.Parse("8:00:00"),
@@ -40,7 +40,7 @@ namespace LAAuto.Entities.Data.Configuration
             service = new Service()
             {
                 Id = Guid.Parse("fce201d7-e941-4f41-b3be-0c265798ede9"),
-                OwnerId = Guid.Parse("95a9873f-d6f4-4496-bf75-62be88716460"),
+                UserId = Guid.Parse("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                 Name = "CarKing",
                 Location = "Гр.Varna, кв.Владиславово, ул.Георги Минков 3",
                 OpenTime = TimeOnly.Parse("10:00:00"),

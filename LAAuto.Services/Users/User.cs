@@ -1,6 +1,6 @@
-﻿namespace LAAuto.Services.Clients
+﻿namespace LAAuto.Services.Users
 {
-    public class CreateClientRequest
+    public class User
     {
         public Guid Id { get; set; }
 
@@ -12,6 +12,6 @@
 
         public string Email { get; set; } = null!;
 
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = null!;
     }
 }
