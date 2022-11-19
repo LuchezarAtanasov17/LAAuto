@@ -23,6 +23,7 @@ namespace LAAuto.Services.Impl.Categories
 
             return categories;
         }
+
         public async Task<Category> GetCategoryAsync(Guid id)
         {
             var entity = await _context.Categories

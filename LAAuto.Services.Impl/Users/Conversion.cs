@@ -34,11 +34,12 @@ namespace LAAuto.Services.Impl.Users
             var target = new ENTITIES.User()
             {
                 UserName = source.UserName,
+                NormalizedUserName = source.UserName.ToUpper(),
                 FirstName = source.FirstName,
                 LastName = source.LastName,
                 PhoneNumber = source.PhoneNumber,
                 Email = source.Email,
-                NormalizedUserName = source.UserName.ToUpper()
+                NormalizedEmail = source.Email.ToUpper(),
             };
 
             return target;

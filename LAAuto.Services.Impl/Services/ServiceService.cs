@@ -38,7 +38,7 @@ namespace LAAuto.Services.Impl.Services
 
             var service = Conversion.ConvertService(entity);
 
-            service.AverageRating = await CalculateAverageServiceRating(id);
+            service.AverageRating = await CalculateAverageServiceRatingAsync(id);
 
             return service;
         }
@@ -94,7 +94,7 @@ namespace LAAuto.Services.Impl.Services
             await _context.SaveChangesAsync();
         }
 
-        private async Task<double> CalculateAverageServiceRating(Guid serviceId)
+        private async Task<double> CalculateAverageServiceRatingAsync(Guid serviceId)
         {
             var filter = new Filter()
             {

@@ -13,21 +13,46 @@ namespace LAAuto.Services.Impl.Ratings
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<List<Rating>> ListRatingsAsync(Filter filter)
+        public async Task<List<Rating>> ListRatingsAsync(Filter? filter = null)
         {
-            //TODO:
-            //var entities = _context.Ratings.Where()
-            throw new NotImplementedException();
+            var entities = await _context.Ratings.ToListAsync();
+
+            if (filter is not null)
+            {
+                if (filter.UserId is not null)
+                {
+                    entities = entities.Where(x => x.UserId == filter.UserId).ToList();
+                }
+                if (filter.ServiceId is not null)
+                {
+                    entities = entities.Where(x => x.ServiceId == filter.ServiceId).ToList();
+                }
+            }
+
+            var ratings = entities
+                .Select(Conversion.ConvertRating)
+                .ToList();
+
+            return ratings;
         }
 
-        public async Task UpdateRatingAsync(Guid ClientId, Guid ServiceId, UpdateRatingRequest request)
+        public async Task UpdateRatingAsync(Guid clientId, Guid serviceId, UpdateRatingRequest request)
         {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             var entities = await _context.Ratings
-                .Where(x => x.UserId == ClientId && x.ServiceId == ServiceId)
+                .Where(x => x.UserId == clientId && x.ServiceId == serviceId)
                 .ToListAsync();
 
             _context.Ratings.RemoveRange(entities);
+
+            var rating = Conversion.ConvertRating(request);
             
+            await _context.AddAsync(rating);
+
             await _context.SaveChangesAsync();
         }
     }
