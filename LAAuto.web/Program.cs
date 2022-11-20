@@ -1,4 +1,14 @@
 using LAAuto.Entities.Data;
+using LAAuto.Services.Appointments;
+using LAAuto.Services.Categories;
+using LAAuto.Services.Impl.Appointments;
+using LAAuto.Services.Impl.Categories;
+using LAAuto.Services.Impl.Ratings;
+using LAAuto.Services.Impl.Services;
+using LAAuto.Services.Impl.Users;
+using LAAuto.Services.Ratings;
+using LAAuto.Services.Services;
+using LAAuto.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +29,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

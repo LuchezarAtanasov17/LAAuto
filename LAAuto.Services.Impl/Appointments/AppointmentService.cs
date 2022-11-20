@@ -66,9 +66,9 @@ namespace LAAuto.Services.Impl.Appointments
                 throw new ObjectNotFoundException($"Could not find appointment with ID {id}.");
             }
 
-            entity.UserId = request.ClientId;
+            entity.UserId = request.UserId;
             entity.CategoryId = request.CategoryId;
-            entity.UserId = request.ClientId;
+            entity.UserId = request.UserId;
             entity.StartDate = request.StartDate;
             entity.EndDate = request.EndDate;
             entity.Description = request.Description;

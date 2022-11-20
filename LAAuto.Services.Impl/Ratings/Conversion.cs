@@ -18,7 +18,7 @@ namespace LAAuto.Services.Impl.Ratings
             var target = new Rating()
             {
                 Id = source.Id,
-                ClientId = source.UserId,
+                UserId = source.UserId,
                 ServiceId = source.ServiceId,
                 Value = source.Value,
                 Service = SERVICES_IMPL_SERVICES.Conversion.ConvertService(source.Service), 
@@ -37,7 +37,7 @@ namespace LAAuto.Services.Impl.Ratings
 
             var target = new ENTITIES.Rating()
             {
-                UserId = source.ClientId,
+                UserId = source.UserId,
                 ServiceId = source.ServiceId,
                 Value = source.Value,
             };

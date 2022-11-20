@@ -20,7 +20,7 @@ namespace LAAuto.Services.Impl.Appointments
                 Id = source.Id,
                 CategoryId = source.CategoryId,
                 ServiceId = source.ServiceId,
-                ClientId = source.UserId,
+                UserId = source.UserId,
                 StartDate = source.StartDate,
                 EndDate = source.EndDate,
                 Description = source.Description,
@@ -43,7 +43,7 @@ namespace LAAuto.Services.Impl.Appointments
             {
                 ServiceId = source.ServiceId,
                 CategoryId = source.CategoryId,
-                UserId = source.ClientId,
+                UserId = source.UserId,
                 StartDate = source.StartDate,
                 EndDate = source.EndDate,
                 Description = source.Description,

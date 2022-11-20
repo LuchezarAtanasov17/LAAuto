@@ -1,6 +1,6 @@
-﻿namespace LAAuto.Services.Appointments
+﻿namespace LAAuto.Web.Models.Appointments
 {
-    public class UpdateAppointmentRequest
+    public class CreateAppointmentRequest
     {
         public Guid ServiceId { get; set; }
 

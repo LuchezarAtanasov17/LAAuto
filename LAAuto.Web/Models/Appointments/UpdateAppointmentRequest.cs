@@ -1,4 +1,4 @@
-﻿namespace LAAuto.Services.Appointments
+﻿namespace LAAuto.Web.Models.Appointments
 {
     public class UpdateAppointmentRequest
     {

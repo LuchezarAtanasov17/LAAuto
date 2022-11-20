@@ -10,7 +10,7 @@ namespace LAAuto.Services.Appointments
 
         public Guid ServiceId { get; set; }
 
-        public Guid ClientId { get; set; }
+        public Guid UserId { get; set; }
 
         public Guid CategoryId { get; set; }
 

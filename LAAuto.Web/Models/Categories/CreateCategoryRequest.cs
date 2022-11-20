@@ -1,4 +1,4 @@
-﻿namespace LAAuto.Services.Categories
+﻿namespace LAAuto.Web.Models.Categories
 {
     public class CreateCategoryRequest
     {
