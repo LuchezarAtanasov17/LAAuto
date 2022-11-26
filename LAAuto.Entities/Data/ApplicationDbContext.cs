@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LAAuto.Entities.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -86,8 +86,6 @@ namespace LAAuto.Entities.Data
         public DbSet<Appointment> Appointments { get; set; }
 
         public DbSet<Category> Categories { get; set; }
-
-        public DbSet<User> Users { get; set; }
 
         public DbSet<Rating> Ratings { get; set; }
 
