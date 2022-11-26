@@ -11,5 +11,7 @@
         Task UpdateServiceAsync(Guid id, UpdateServiceRequest request);
 
         Task DeleteServiceAsync(Guid id);
+
+        Task<bool> ExistById(Guid id);
     }
 }

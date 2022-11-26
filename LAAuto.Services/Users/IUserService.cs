@@ -6,8 +6,6 @@
 
         Task<User> GetUserAsync(Guid id);
 
-        Task UpdateUserAsync(Guid id, UpdateUserRequest request);
-
-        Task CreateUserAsync(CreateUserRequest request);
+        Task DeleteUserAsync(Guid id);
     }
 }

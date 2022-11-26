@@ -70,7 +70,7 @@ namespace LAAuto.Services.Impl.Services
                 throw new ObjectNotFoundException($"Could not find service with ID {id}.");
             }
 
-            entity.UserId = request.OwnerId;
+            entity.UserId = request.UserId;
             entity.Name = request.Name;
             entity.OpenTime = request.OpenTime;
             entity.CloseTime = request.CloseTime;
@@ -106,6 +106,13 @@ namespace LAAuto.Services.Impl.Services
             double average = ratings.Average(x => x.Value);
 
             return average;
+        }
+
+        public async Task<bool> ExistById(Guid id)
+        {
+            bool result = await _context.Services.AnyAsync(x => x.Id == id);
+
+            return result;
         }
     }
 }

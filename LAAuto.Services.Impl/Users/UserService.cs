@@ -39,39 +39,17 @@ namespace LAAuto.Services.Impl.Users
             return user;
         }
 
-        public async Task CreateUserAsync(CreateUserRequest request)
+        public async Task DeleteUserAsync(Guid id)
         {
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            var entity = Conversion.ConvertUser(request);
-            
-            await _context.Users.AddAsync(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateUserAsync(Guid id, UpdateUserRequest request)
-        {
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            var entity = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _context.Users
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity is null)
             {
-                throw new ObjectNotFoundException($"Could not find a user with ID {id}.");
+                throw new ObjectNotFoundException($"Could not find user with ID {id}");
             }
 
-            entity.FirstName = request.FirstName;
-            entity.LastName = request.LastName;
-            entity.PhoneNumber = request.PhoneNumber;
-            entity.UserName = request.UserName;
-            entity.NormalizedUserName = request.UserName.ToUpper();
-
+            _context.Remove(entity);
             await _context.SaveChangesAsync();
         }
     }

@@ -22,7 +22,7 @@ namespace LAAuto.Services.Impl.Services
                 CloseTime = source.CloseTime,
                 Location = source.Location,
                 Description = source.Description,
-                User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
+                //User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
                 //TODO: AverageRating
             };
 
@@ -38,7 +38,7 @@ namespace LAAuto.Services.Impl.Services
 
             var target = new ENTITIES.Service()
             {
-                UserId = source.OwnerId,
+                UserId = source.UserId,
                 Name = source.Name,
                 OpenTime = source.OpenTime,
                 CloseTime = source.CloseTime,
