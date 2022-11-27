@@ -20,14 +20,14 @@ namespace LAAuto.Web.Models.Categories
             return target;
         }
 
-        public static CreateCategoryRequest ConvertCreateCategoryRequest(SERVICES_CATEGORIES.CreateCategoryRequest source)
+        public static SERVICES_CATEGORIES.CreateCategoryRequest ConvertCreateCategoryRequest(CreateCategoryRequest source)
         {
             if (source is null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            CreateCategoryRequest target = new CreateCategoryRequest()
+            SERVICES_CATEGORIES.CreateCategoryRequest target = new SERVICES_CATEGORIES.CreateCategoryRequest()
             {
                 Name = source.Name,
             };

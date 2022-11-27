@@ -2,7 +2,7 @@
 {
     public class UpdateServiceRequest
     {
-        public Guid OwnerId { get; set; }
+        public Guid UserId { get; set; }
 
         public string Name { get; set; } = null!;
 

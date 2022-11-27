@@ -31,14 +31,14 @@ namespace LAAuto.Web.Models.Appointments
             return target;
         }
 
-        public static CreateAppointmentRequest ConvertCreateAppointmentRequest(SERVICES_APPOINTMENTS.CreateAppointmentRequest source)
+        public static SERVICES_APPOINTMENTS.CreateAppointmentRequest ConvertCreateAppointmentRequest(CreateAppointmentRequest source)
         {
             if (source is null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            CreateAppointmentRequest target = new CreateAppointmentRequest()
+            SERVICES_APPOINTMENTS.CreateAppointmentRequest target = new SERVICES_APPOINTMENTS.CreateAppointmentRequest()
             {
                 CategoryId = source.CategoryId,
                 UserId = source.UserId,
@@ -51,14 +51,14 @@ namespace LAAuto.Web.Models.Appointments
             return target;
         }
 
-        public static UpdateAppointmentRequest ConvertUpdateAppointmentRequest(SERVICES_APPOINTMENTS.UpdateAppointmentRequest source)
+        public static SERVICES_APPOINTMENTS.UpdateAppointmentRequest ConvertUpdateAppointmentRequest(UpdateAppointmentRequest source)
         {
             if (source is null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            UpdateAppointmentRequest target = new UpdateAppointmentRequest()
+            SERVICES_APPOINTMENTS.UpdateAppointmentRequest target = new SERVICES_APPOINTMENTS.UpdateAppointmentRequest()
             {
                 CategoryId = source.CategoryId,
                 UserId = source.UserId,
