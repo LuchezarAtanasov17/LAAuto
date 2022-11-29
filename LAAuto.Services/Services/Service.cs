@@ -1,4 +1,6 @@
-﻿using LAAuto.Services.Users;
+﻿using LAAuto.Services.Appointments;
+using LAAuto.Services.Categories;
+using LAAuto.Services.Users;
 
 namespace LAAuto.Services.Services
 {
@@ -21,5 +23,9 @@ namespace LAAuto.Services.Services
         public double AverageRating { get; set; }
 
         public User User { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
+
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }
