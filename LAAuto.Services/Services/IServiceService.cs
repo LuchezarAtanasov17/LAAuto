@@ -2,7 +2,9 @@
 {
     public interface IServiceService
     {
-        Task<List<Service>> ListServicesAsync();
+        Task<List<Service>> ListServicesAsync(string? categoryFilter = null);
+
+        Task<List<Service>> ListMyServicesAsync(Guid userId);
 
         Task<Service> GetServiceAsync(Guid id);
 
@@ -12,6 +14,8 @@
 
         Task DeleteServiceAsync(Guid id);
 
-        Task<bool> ExistById(Guid id);
+        Task MakeAppointmentAsync(Guid id, Guid currentUserId);
+
+        Task CancelAppointmentAsync(Guid id);
     }
 }

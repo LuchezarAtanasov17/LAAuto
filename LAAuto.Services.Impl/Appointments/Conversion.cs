@@ -25,7 +25,7 @@ namespace LAAuto.Services.Impl.Appointments
                 EndDate = source.EndDate,
                 Description = source.Description,
                 Category = SERVICES_IMPL_CATEGORIES.Conversion.ConvertCategory(source.Category),
-                User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
+                //User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
                 Service = SERVICES_IMPL_SERVICES.Conversion.ConvertService(source.Service)
             };
 

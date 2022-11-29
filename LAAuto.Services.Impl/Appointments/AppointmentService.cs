@@ -1,5 +1,7 @@
 ﻿using LAAuto.Entities.Data;
 using LAAuto.Services.Appointments;
+using LAAuto.Services.Services;
+using LAAuto.Services.Users;
 using Microsoft.EntityFrameworkCore;
 using ENTITIES = LAAuto.Entities.Models;
 
@@ -8,19 +10,30 @@ namespace LAAuto.Services.Impl.Appointments
     public class AppointmentService : IAppointmentService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IUserService _userService;
+        private readonly IServiceService _serviceService;
 
-        public AppointmentService(ApplicationDbContext context)
+
+        public AppointmentService(
+            ApplicationDbContext context,
+            IUserService userService,
+            IServiceService serviceService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _serviceService = serviceService ?? throw new ArgumentNullException(nameof(serviceService));
         }
 
         public async Task<List<Appointment>> ListAppointmentsAsync()
         {
             List<ENTITIES.Appointment> entities = await _context.Appointments.ToListAsync();
 
-            var appointments = entities
-                .Select(Conversion.ConvertAppointment)
-                .ToList();
+            List<Appointment> appointments = new List<Appointment>();
+
+            foreach (var entity in entities)
+            {
+                appointments.Add(await GetAppointmentAsync(entity.Id));
+            }
 
             return appointments;
         }
@@ -35,6 +48,8 @@ namespace LAAuto.Services.Impl.Appointments
             }
 
             var appointment = Conversion.ConvertAppointment(entity);
+            appointment.User = await _userService.GetUserAsync(appointment.UserId);
+            appointment.Service = await _serviceService.GetServiceAsync(appointment.ServiceId);
 
             return appointment;
         }

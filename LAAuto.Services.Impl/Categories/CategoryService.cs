@@ -1,5 +1,6 @@
 ﻿using LAAuto.Entities.Data;
 using LAAuto.Services.Categories;
+using LAAuto.Services.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace LAAuto.Services.Impl.Categories
@@ -7,19 +8,26 @@ namespace LAAuto.Services.Impl.Categories
     public class CategoryService : ICategoryService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IServiceService _serviceService;
 
-        public CategoryService(ApplicationDbContext context)
+        public CategoryService(
+            ApplicationDbContext context, 
+            IServiceService serviceService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _serviceService = serviceService ?? throw new ArgumentNullException(nameof(serviceService));
         }
 
         public async Task<List<Category>> ListCategoriesAsync()
         {
             var entities = await _context.Categories.ToListAsync();
 
-            var categories = entities
-                .Select(Conversion.ConvertCategory)
-                .ToList();
+            List<Category> categories = new List<Category>();
+
+            foreach (var entity in entities)
+            {
+                categories.Add(await GetCategoryAsync(entity.Id));
+            }
 
             return categories;
         }
@@ -34,9 +42,10 @@ namespace LAAuto.Services.Impl.Categories
                 throw new ObjectNotFoundException($"Could not find category with ID {id}");
             }
 
-            var appointment = Conversion.ConvertCategory(entity);
+            var category = Conversion.ConvertCategory(entity);
+            category.Services = await _serviceService.ListServicesAsync();
 
-            return appointment;
+            return category;
         }
 
         public async Task CreateCategoryAsync(CreateCategoryRequest request)

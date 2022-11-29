@@ -1,6 +1,9 @@
 ﻿using LAAuto.Entities.Data;
+using LAAuto.Services.Appointments;
+using LAAuto.Services.Categories;
 using LAAuto.Services.Ratings;
 using LAAuto.Services.Services;
+using LAAuto.Services.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace LAAuto.Services.Impl.Services
@@ -9,20 +12,61 @@ namespace LAAuto.Services.Impl.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IRatingService _ratingService;
+        private readonly IUserService _userService;
+        private readonly IAppointmentService _appointmentService;
+        private readonly ICategoryService _categoryService;
 
-        public ServiceService(ApplicationDbContext context, IRatingService ratingService)
+        public ServiceService(
+            ApplicationDbContext context,
+            IRatingService ratingService, 
+            IUserService userService,
+            IAppointmentService appointmentService,
+            ICategoryService categoryService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _ratingService = ratingService ?? throw new ArgumentNullException(nameof(ratingService));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _appointmentService = appointmentService ?? throw new ArgumentNullException(nameof(appointmentService));
+            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
         }
 
-        public async Task<List<Service>> ListServicesAsync()
+        public async Task<List<Service>> ListServicesAsync(string? categoryFilter = null)
         {
             var entities = await _context.Services.ToListAsync();
 
-            var services = entities
-                .Select(Conversion.ConvertService)
-                .ToList();
+            List<Service> services = new List<Service>();
+
+            foreach (var entity in entities)
+            {
+                services.Add(await GetServiceAsync(entity.Id));
+            }
+
+            if (categoryFilter is not null)
+            {
+                services = services
+                    .Where(x => x.Categories
+                        .Any(c => c.Name == categoryFilter))
+                    .ToList();
+            }
+
+            return services;
+        }
+
+        public async Task<List<Service>> ListMyServicesAsync(Guid userId)
+        {
+            var entities = await _context.Services
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+
+            List<Service> services = new List<Service>();
+
+            foreach (var entity in entities)
+            {
+                services.Add(await GetServiceAsync(entity.Id));
+            }
+            //List<Service> services = entities
+            //    .Select(Conversion.ConvertService)
+            //    .ToList();
 
             return services;
         }
@@ -37,8 +81,12 @@ namespace LAAuto.Services.Impl.Services
             }
 
             var service = Conversion.ConvertService(entity);
+            service.User = await _userService.GetUserAsync(service.UserId);
+            service.Appointments = await _appointmentService.ListAppointmentsAsync();
+            service.Categories = await _categoryService.ListCategoriesAsync();
 
-            service.AverageRating = await CalculateAverageServiceRatingAsync(id);
+
+            //service.AverageRating = await CalculateAverageServiceRatingAsync(id);
 
             return service;
         }
@@ -93,6 +141,33 @@ namespace LAAuto.Services.Impl.Services
             _context.Remove(entity);
             await _context.SaveChangesAsync();
         }
+        public async Task MakeAppointmentAsync(Guid id, Guid currentUserId)
+        {
+            var entity = await _context.Services
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (entity is null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            var service = Conversion.ConvertService(entity);
+
+            var appointment = service.Appointments.FirstOrDefault(x => x.UserId == currentUserId);
+
+            // appointment.
+        }
+
+        public async Task CancelAppointmentAsync(Guid id)
+        {
+            var service = await _context.Services
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (service is null)
+            {
+                throw new ArgumentNullException(nameof(service));
+            }
+        }
 
         private async Task<double> CalculateAverageServiceRatingAsync(Guid serviceId)
         {
@@ -106,13 +181,6 @@ namespace LAAuto.Services.Impl.Services
             double average = ratings.Average(x => x.Value);
 
             return average;
-        }
-
-        public async Task<bool> ExistById(Guid id)
-        {
-            bool result = await _context.Services.AnyAsync(x => x.Id == id);
-
-            return result;
         }
     }
 }
