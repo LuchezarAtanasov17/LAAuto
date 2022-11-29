@@ -18,10 +18,10 @@ namespace LAAuto.Entities.Models
         [Required]
         public int Value { get; set; }
 
-        [Required]
+        [ForeignKey(nameof(UserId))]
         public User User { get; set; }
 
-        [Required]
+        [ForeignKey(nameof(ServiceId))]
         public Service Service { get; set; }
     }
 }

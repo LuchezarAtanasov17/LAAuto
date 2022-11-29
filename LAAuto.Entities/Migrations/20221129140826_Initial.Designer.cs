@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LAAuto.Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221126221951_updateDb")]
-    partial class updateDb
+    [Migration("20221129140826_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -342,7 +342,7 @@ namespace LAAuto.Entities.Migrations
                         {
                             Id = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e8d44782-291f-430d-a980-04c2feb0f41f",
+                            ConcurrencyStamp = "56d264fb-ddef-492b-b89c-54aea4b35772",
                             Email = "client@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Pesho",
