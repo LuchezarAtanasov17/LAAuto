@@ -1,6 +1,5 @@
-﻿
-
-using LAAuto.Services.Users;
+﻿using LAAuto.Web.Models.Appointments;
+using LAAuto.Web.Models.Categories;
 using LAAuto.Web.Models.Users;
 
 namespace LAAuto.Web.Models.Services
@@ -24,5 +23,9 @@ namespace LAAuto.Web.Models.Services
         public double AverageRating { get; set; }
 
         public UserViewModel User { get; set; }
+
+        public ICollection<CategoryViewModel> Categories { get; set; }
+
+        public ICollection<AppointmentViewModel> Appointments { get; set; }
     }
 }

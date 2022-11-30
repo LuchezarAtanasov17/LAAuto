@@ -1,5 +1,8 @@
 ﻿using SERVICES_SERVICES = LAAuto.Services.Services;
+using WEB_CATEGORY = LAAuto.Web.Models.Categories;
+using WEB_APPOINTMENT = LAAuto.Web.Models.Appointments;
 using WEB_USERS = LAAuto.Web.Models.Users;
+
 
 namespace LAAuto.Web.Models.Services
 {
@@ -21,7 +24,14 @@ namespace LAAuto.Web.Models.Services
                 OpenTime = source.OpenTime,
                 CloseTime = source.CloseTime,
                 Location = source.Location,
-                AverageRating = source.AverageRating,
+                //AverageRating = source.AverageRating,
+                Categories = source.Categories
+                    .Select(WEB_CATEGORY.Conversion.ConvertCategory)
+                    .ToHashSet(),
+                Appointments = source.Appointments
+                    .Select(WEB_APPOINTMENT.Conversion.ConvertAppointment)
+                    .ToHashSet(),
+
                 //User = WEB_USERS.Conversion.ConvertUser(source.User),
             };
 
@@ -37,12 +47,10 @@ namespace LAAuto.Web.Models.Services
 
             var target = new SERVICES_SERVICES.CreateServiceRequest
             {
-                Id = source.Id,
-                UserId = source.UserId,
                 Name = source.Name,
                 Description = source.Description,
-                OpenTime = source.OpenTime,
-                CloseTime = source.CloseTime,
+                OpenTime = new TimeOnly(),
+                CloseTime = new TimeOnly(),
                 Location = source.Location,
             };
 

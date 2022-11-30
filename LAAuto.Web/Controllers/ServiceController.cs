@@ -1,7 +1,9 @@
 ﻿using LAAuto.Web.Models.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using SERVICES = LAAuto.Services.Services;
+using USERS = LAAuto.Services.Users;
 
 namespace LAAuto.Web.Controllers
 {
@@ -9,10 +11,13 @@ namespace LAAuto.Web.Controllers
     public class ServiceController : Controller
     {
         private readonly SERVICES.IServiceService _serviceService;
+        private readonly USERS.IUserService _userService;
 
-        public ServiceController(SERVICES.IServiceService serviceService)
+
+        public ServiceController(SERVICES.IServiceService serviceService, USERS.IUserService userService)
         {
             _serviceService = serviceService ?? throw new ArgumentNullException(nameof(serviceService));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
         [HttpGet]
@@ -28,15 +33,33 @@ namespace LAAuto.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Mine()
+        {
+            Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var serviceServices = await _serviceService.ListMyServicesAsync(userId);
+
+            var services = serviceServices.Select(Conversion.ConvertService).ToList();
+
+            //TODO:
+            if (services.Count == 0)
+            {
+                return RedirectToAction(nameof(List));
+            }
+
+            return View(serviceServices);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Get(
-            [FromQuery]
             Guid id)
         {
             var serviceService = await _serviceService.GetServiceAsync(id);
 
             var service = Conversion.ConvertService(serviceService);
+            //service.User = await _userService.GetUserAsync(service.UserId);
 
-            return View(service);
+            return View("Details",service);
         }
 
         [HttpPost]
@@ -50,6 +73,8 @@ namespace LAAuto.Web.Controllers
             }
 
             var serviceReqeust = Conversion.ConvertService(request);
+
+            serviceReqeust.UserId = Guid.Parse("BF02CA97-4DFE-4255-B000-08DAD31010DB"); //Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             await _serviceService.CreateServiceAsync(serviceReqeust);
 

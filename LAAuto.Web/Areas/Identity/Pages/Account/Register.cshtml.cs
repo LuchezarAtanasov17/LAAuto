@@ -100,18 +100,18 @@ namespace LAAuto.Web.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
-            [Display(Name = "UserName")]
+            [Display(Name = "User name")]
             public string UserName { get; set; }
 
-            [Display(Name = "FirstName")]
+            [Display(Name = "First name")]
 
             public string? FirstName { get; set; }
 
-            [Display(Name = "LastName")]
+            [Display(Name = "Last name")]
 
             public string? LastName { get; set; }
 
-            [Display(Name = "PhoneNumber")]
+            [Display(Name = "Phone number")]
             public string? PhoneNumber { get; set; }
         }
 

@@ -34,12 +34,9 @@ namespace LAAuto.Services.Impl.Services
         {
             var entities = await _context.Services.ToListAsync();
 
-            List<Service> services = new List<Service>();
-
-            foreach (var entity in entities)
-            {
-                services.Add(await GetServiceAsync(entity.Id));
-            }
+            var services = entities
+                 .Select(Conversion.ConvertService)
+                 .ToList();
 
             if (categoryFilter is not null)
             {
@@ -58,15 +55,9 @@ namespace LAAuto.Services.Impl.Services
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
 
-            List<Service> services = new List<Service>();
-
-            foreach (var entity in entities)
-            {
-                services.Add(await GetServiceAsync(entity.Id));
-            }
-            //List<Service> services = entities
-            //    .Select(Conversion.ConvertService)
-            //    .ToList();
+            List<Service> services = entities
+                .Select(Conversion.ConvertService)
+                .ToList();
 
             return services;
         }

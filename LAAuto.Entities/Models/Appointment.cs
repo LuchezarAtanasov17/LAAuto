@@ -27,14 +27,11 @@ namespace LAAuto.Entities.Models
         [StringLength(300)]
         public string? Description { get; set; }
 
-        [ForeignKey(nameof(ServiceId))]
+        [Required]
         public Service Service { get; set; }
 
-        [Required]
-        [ForeignKey(nameof(UserId))]
         public User User { get; set; }
 
-        [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }
     }
 }

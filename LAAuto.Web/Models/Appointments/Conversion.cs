@@ -23,9 +23,9 @@ namespace LAAuto.Web.Models.Appointments
                 Description = source.Description,
                 StartDate = source.StartDate,
                 EndDate = source.EndDate,
-                Category = WEB_CATEGORIES.Conversion.ConvertCategory(source.Category),
-                Service = WEB_SERVICES.Conversion.ConvertService(source.Service),
-                User = WEB_USERS.Conversion.ConvertUser(source.User),
+                //Category = WEB_CATEGORIES.Conversion.ConvertCategory(source.Category),
+                //Service = WEB_SERVICES.Conversion.ConvertService(source.Service),
+                //User = WEB_USERS.Conversion.ConvertUser(source.User),
             };
 
             return target;

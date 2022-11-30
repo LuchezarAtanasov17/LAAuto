@@ -1,0 +1,25 @@
+﻿@using LAAuto.Web.Models.Services
+
+@model ServiceViewModel
+
+<div class="col-md-4">
+    <div class="card mb-3">
+        @*<img class="card-img-top" src="@Model.ImageUrl" alt="House Image">*@
+        <div class="card-body text-center">
+            <h4>@Model.Name</h4>
+            <h6>Address: <b>@Model.Location</b></h6>
+            <h6>
+                Open at:
+                <b>@Model.OpenTime</b>
+            </h6>
+            <h6>
+                Close at:
+                <b>@Model.CloseTime</b>
+            </h6>
+            <br />
+
+            <a asp-controller="Service" asp-action="Get" asp-route-id="@Model.Id"
+               class="btn btn-success">Details</a>
+        </div>
+    </div>
+</div>

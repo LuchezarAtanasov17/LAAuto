@@ -21,16 +21,19 @@ namespace LAAuto.Entities.Data
                 builder.HasOne(x => x.Service)
                     .WithMany(x => x.Appointments)
                     .HasForeignKey(x => x.ServiceId)
+                    .HasPrincipalKey(x => x.Id)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 builder.HasOne(x => x.User)
                     .WithMany(x => x.Appointments)
                     .HasForeignKey(x => x.UserId)
+                    .HasPrincipalKey(x => x.Id)
                     .OnDelete(DeleteBehavior.NoAction);
 
                 builder.HasOne(x => x.Category)
                     .WithMany(x => x.Appointments)
                     .HasForeignKey(x => x.CategoryId)
+                    .HasPrincipalKey(x => x.Id)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
@@ -39,11 +42,13 @@ namespace LAAuto.Entities.Data
                 builder.HasOne(x => x.Service)
                     .WithMany(x => x.Ratings)
                     .HasForeignKey(x => x.ServiceId)
+                    .HasPrincipalKey(x => x.Id)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 builder.HasOne(x => x.User)
                     .WithMany(x => x.Ratings)
                     .HasForeignKey(x => x.UserId)
+                    .HasPrincipalKey(x => x.Id)
                     .OnDelete(DeleteBehavior.NoAction);
             });
 
@@ -58,6 +63,7 @@ namespace LAAuto.Entities.Data
                 builder.HasOne(x => x.User)
                     .WithMany(x => x.Services)
                     .HasForeignKey(x => x.UserId)
+                    .HasPrincipalKey(x => x.Id)
                     .OnDelete(DeleteBehavior.NoAction);
             });
 
@@ -67,18 +73,20 @@ namespace LAAuto.Entities.Data
 
                 builder.HasOne(x => x.Category)
                     .WithMany(x => x.CategoryServices)
-                    .HasForeignKey(x => x.CategoryId);
+                    .HasForeignKey(x => x.CategoryId)
+                    .HasPrincipalKey(x => x.Id);
 
                 builder.HasOne(x => x.Service)
                     .WithMany(x => x.CategoryServices)
-                    .HasForeignKey(x => x.ServiceId);
+                    .HasForeignKey(x => x.ServiceId)
+                    .HasPrincipalKey(x => x.Id);
             });
 
-            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new RatingConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+            modelBuilder.ApplyConfiguration(new RatingConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
