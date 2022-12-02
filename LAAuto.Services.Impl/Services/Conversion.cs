@@ -25,14 +25,14 @@ namespace LAAuto.Services.Impl.Services
                 CloseTime = source.CloseTime,
                 Location = source.Location,
                 Description = source.Description,
-                //User = _
+                User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
                 Categories = source.Categories
                     .Select(SERVICES_IMPL_CATEGORY.Conversion.ConvertCategory)
                     .ToHashSet(),
-                Appointments = source.Appointments
-                    .Select(SERVICES_IMPL_APPOINTMENT.Conversion.ConvertAppointment)
-                    .ToHashSet(),
-                
+                //Appointments = source.Appointments
+                //    .Select(SERVICES_IMPL_APPOINTMENT.Conversion.ConvertAppointment)
+                //    .ToHashSet(),
+
                 //TODO: AverageRating 
             };
 

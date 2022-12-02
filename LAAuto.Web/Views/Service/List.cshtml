@@ -4,9 +4,17 @@
 
 @model List<ServiceViewModel>
 
-<div class="row">
-    @foreach (var service in Model)
-    {
-        <partial name="ServicePartial" model="@service" />
-    }
+<div>
+    <a class="ml-2 btn btn-primary" asp-controller="Service" asp-action="Create">Create</a>
+</div>
+
+<br />
+
+<div class="position-relative">
+    <div class="row">
+        @foreach (var service in Model)
+        {
+            <partial name="ServicePartial" model="@service" />
+        }
+    </div>
 </div>

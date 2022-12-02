@@ -17,7 +17,10 @@ namespace LAAuto.Services.Impl.Appointments
 
         public async Task<List<Appointment>> ListAppointmentsAsync()
         {
-            List<ENTITIES.Appointment> entities = await _context.Appointments.ToListAsync();
+            var entities = await _context.Appointments
+                .Include(x => x.User)
+                .Include(x => x.Service)
+                .ToListAsync();
 
             var appointments = entities
                 .Select(Conversion.ConvertAppointment)

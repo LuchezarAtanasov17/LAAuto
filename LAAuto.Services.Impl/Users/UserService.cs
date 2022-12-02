@@ -15,7 +15,8 @@ namespace LAAuto.Services.Impl.Users
 
         public async Task<List<User>> ListUsersAsync()
         {
-            var entities = await _context.Users.ToListAsync();
+            var entities = await _context.Users
+                .ToListAsync();
 
             var users = entities
                 .Select(Conversion.ConvertUser)

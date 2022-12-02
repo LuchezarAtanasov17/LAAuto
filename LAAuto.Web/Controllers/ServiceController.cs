@@ -62,9 +62,16 @@ namespace LAAuto.Web.Controllers
             return View("Details",service);
         }
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var model = new CreateServiceRequest();
+
+            return View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(
-            [FromBody]
             CreateServiceRequest request)
         {
             if (request is null)
@@ -74,7 +81,7 @@ namespace LAAuto.Web.Controllers
 
             var serviceReqeust = Conversion.ConvertService(request);
 
-            serviceReqeust.UserId = Guid.Parse("BF02CA97-4DFE-4255-B000-08DAD31010DB"); //Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            serviceReqeust.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             await _serviceService.CreateServiceAsync(serviceReqeust);
 

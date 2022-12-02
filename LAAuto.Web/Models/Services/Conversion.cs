@@ -24,15 +24,15 @@ namespace LAAuto.Web.Models.Services
                 OpenTime = source.OpenTime,
                 CloseTime = source.CloseTime,
                 Location = source.Location,
-                //AverageRating = source.AverageRating,
+                User = WEB_USERS.Conversion.ConvertUser(source.User),
                 Categories = source.Categories
                     .Select(WEB_CATEGORY.Conversion.ConvertCategory)
                     .ToHashSet(),
-                Appointments = source.Appointments
-                    .Select(WEB_APPOINTMENT.Conversion.ConvertAppointment)
-                    .ToHashSet(),
-
-                //User = WEB_USERS.Conversion.ConvertUser(source.User),
+                //Appointments = source.Appointments
+                //    .Select(WEB_APPOINTMENT.Conversion.ConvertAppointment)
+                //    .ToHashSet(),
+                
+                //AverageRating = source.AverageRating,
             };
 
             return target;

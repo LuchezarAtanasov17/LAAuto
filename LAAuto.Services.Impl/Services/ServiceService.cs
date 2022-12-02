@@ -1,9 +1,6 @@
 ﻿using LAAuto.Entities.Data;
-using LAAuto.Services.Appointments;
-using LAAuto.Services.Categories;
 using LAAuto.Services.Ratings;
 using LAAuto.Services.Services;
-using LAAuto.Services.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace LAAuto.Services.Impl.Services
@@ -12,27 +9,22 @@ namespace LAAuto.Services.Impl.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IRatingService _ratingService;
-        private readonly IUserService _userService;
-        private readonly IAppointmentService _appointmentService;
-        private readonly ICategoryService _categoryService;
 
         public ServiceService(
             ApplicationDbContext context,
-            IRatingService ratingService, 
-            IUserService userService,
-            IAppointmentService appointmentService,
-            ICategoryService categoryService)
+            IRatingService ratingService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _ratingService = ratingService ?? throw new ArgumentNullException(nameof(ratingService));
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _appointmentService = appointmentService ?? throw new ArgumentNullException(nameof(appointmentService));
-            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
         }
 
         public async Task<List<Service>> ListServicesAsync(string? categoryFilter = null)
         {
-            var entities = await _context.Services.ToListAsync();
+            var entities = await _context.Services
+                .Include(x => x.User)
+                .Include(x => x.CategoryServices)
+                .Include(x => x.Appointments)
+                .ToListAsync();
 
             var services = entities
                  .Select(Conversion.ConvertService)
@@ -52,6 +44,9 @@ namespace LAAuto.Services.Impl.Services
         public async Task<List<Service>> ListMyServicesAsync(Guid userId)
         {
             var entities = await _context.Services
+                .Include(x => x.User)
+                .Include(x => x.CategoryServices)
+                .Include(x => x.Appointments)
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
 
@@ -64,7 +59,11 @@ namespace LAAuto.Services.Impl.Services
 
         public async Task<Service> GetServiceAsync(Guid id)
         {
-            var entity = await _context.Services.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _context.Services
+                .Include(x => x.User)
+                .Include(x => x.CategoryServices)
+                .Include(x => x.Appointments)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity is null)
             {
@@ -72,10 +71,6 @@ namespace LAAuto.Services.Impl.Services
             }
 
             var service = Conversion.ConvertService(entity);
-            service.User = await _userService.GetUserAsync(service.UserId);
-            service.Appointments = await _appointmentService.ListAppointmentsAsync();
-            service.Categories = await _categoryService.ListCategoriesAsync();
-
 
             //service.AverageRating = await CalculateAverageServiceRatingAsync(id);
 

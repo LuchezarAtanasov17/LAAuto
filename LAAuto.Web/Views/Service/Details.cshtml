@@ -1,4 +1,5 @@
 ﻿@using LAAuto.Web.Models.Services
+@using System.Security.Claims
 
 @model ServiceViewModel
 
@@ -35,36 +36,32 @@
                 }
             </p>
             <div class="form-inline">
-                @if (this.User.Identity.IsAuthenticated )
+                @if (this.User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-warning" asp-controller="Service" asp-action="Update"
-                   asp-route-id="@Model.Id">Edit</a>
-                    <a class="ml-2 btn btn-danger" asp-controller="Service" asp-action="Delete"
-                   asp-route-id="@Model.Id">Delete</a>
-                    @*@if (!Model.IsRented)
+                    @if (Model.UserId == Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
                     {
-                        <form class="ml-2" asp-controller="House"
-                      asp-action="Rent" asp-route-id="@Model.Id" method="post">
-                            <input class="btn btn-primary" type="submit" value="Rent" />
-                        </form>
+                        <a class="btn btn-warning" asp-controller="Service" asp-action="Update"
+                   asp-route-id="@Model.Id">Edit</a>
+                        <a class="ml-2 btn btn-danger" asp-controller="Service" asp-action="Delete"
+                   asp-route-id="@Model.Id">Delete</a>
                     }
                     else
                     {
-                        <form class="ml-2" asp-controller="House" asp-action="Leave"
-                      asp-route-id="@Model.Id" method="post">
-                            <input class="btn btn-primary" type="submit" value="Leave" />
+                        <form class="ml-2" asp-controller="Appointment"
+                      asp-action="Create" asp-route-id="@Model.Id" method="post">
+                            <input class="btn btn-primary" type="submit" value="Make an appointment" />
                         </form>
-                    }*@
+                    }
                 }
             </div>
             <p></p>
-           @* <div class="card" style="width: 18rem;">
+            <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">Owner Info</h5>
                     <p class="card-text">Email: @Model.User.Email</p>
                     <p class="card-text">Phone Number: @Model.User.PhoneNumber</p>
                 </div>
-            </div>*@
+            </div>
         </div>
     </div>
 </div>

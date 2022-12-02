@@ -1,5 +1,7 @@
 ﻿using LAAuto.Services.Users;
 using ENTITIES = LAAuto.Entities.Models;
+using SERVICES_IMPL_SERVICES = LAAuto.Services.Impl.Services;
+using SERVICES_IMPL_APPOINTMENTS = LAAuto.Services.Impl.Appointments;
 
 namespace LAAuto.Services.Impl.Users
 {

@@ -1,4 +1,5 @@
 ﻿@using LAAuto.Web.Models.Services
+@*@using LAAuto.Web.Models.Services
 
 @model ServiceViewModel
 
@@ -17,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description"></label>
-                <textarea asp-for="Description" rows="4" class="form-control" placeholder="Two bedrooms..."></textarea>
+                <textarea asp-for="Description" rows="4" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="small text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,19 +31,62 @@
                 <input asp-for="CloseTime" class="form-control">
                 <span asp-validation-for="CloseTime" class="small text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="CategoryId"></label>
-                <select asp-for="CategoryId" class="form-control">
-                    @foreach (var category in Model.Ca)
-                    {
-                        <option value="@category.Id">@category.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="CategoryId" class="small text-danger"></span>
-            </div>*@
+            <div class="form-group">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" class="form-control">
+            @foreach (var category in Model.Ca)
+            {
+            <option value="@category.Id">@category.Name</option>
+            }
+            </select>
+            <span asp-validation-for="CategoryId" class="small text-danger"></span>
+            </div>
 
-            <div class="text-center">
-                <input class="btn btn-primary mt-3" type="submit" value="Save" />
+            <div class="mb-3">
+                <input class="btn btn-success" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
+*@
+
+@model CreateServiceRequest
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form method="post">
+            <div class="mb-3">
+                <label asp-for="@Model.Name" class="form-label">Car service name</label>
+                <input asp-for="@Model.Name" class="form-control" aria-required="true" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Location" class="form-label">Location</label>
+                <input asp-for="@Model.Location" class="form-control" aria-required="true" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Description" class="form-label">Description</label>
+                <input type="text" asp-for="@Model.Description" class="form-control" aria-required="true" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.OpenTime" class="form-label">OpenTime</label>
+                <input type="text" asp-for="@Model.OpenTime" class="form-control" aria-required="true" />
+                <span asp-validation-for="OpenTime" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.CloseTime" class="form-label">CloseTime</label>
+                <input type="text" asp-for="@Model.CloseTime" class="form-control" aria-required="true" />
+                <span asp-validation-for="CloseTime" class="text-danger"></span>
+            </div>
+            @*   <div class="mb-3">
+            <label asp-for="@Model.Image" class="form-label">Images</label>
+            <input type ="file" name= "image" asp-for="@Model.Image" class="form-control" aria-required="true" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+            </div>*@
+            <div class="mb-3">
+                <input class="btn btn-success" asp-controller="Service" asp-action="Create" type="submit" value="Save" />
             </div>
         </form>
     </div>

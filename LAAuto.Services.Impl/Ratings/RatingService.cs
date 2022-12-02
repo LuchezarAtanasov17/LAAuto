@@ -15,7 +15,10 @@ namespace LAAuto.Services.Impl.Ratings
 
         public async Task<List<Rating>> ListRatingsAsync(Filter? filter = null)
         {
-            var entities = await _context.Ratings.ToListAsync();
+            var entities = await _context.Ratings
+                .Include(x => x.User)
+                .Include(x => x.Service)
+                .ToListAsync();
 
             if (filter is not null)
             {

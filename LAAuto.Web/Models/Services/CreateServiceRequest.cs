@@ -8,8 +8,8 @@
 
         public string Location { get; set; } = null!;
 
-        //public TimeOnly OpenTime { get; set; }
+        public TimeOnly OpenTime { get; set; }
 
-        //public TimeOnly CloseTime { get; set; }
+        public TimeOnly CloseTime { get; set; }
     }
 }

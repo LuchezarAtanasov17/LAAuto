@@ -1,4 +1,8 @@
-﻿namespace LAAuto.Services.Users
+﻿using LAAuto.Services.Appointments;
+using LAAuto.Services.Ratings;
+using LAAuto.Services.Services;
+
+namespace LAAuto.Services.Users
 {
     public class User
     {

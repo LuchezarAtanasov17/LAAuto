@@ -15,7 +15,8 @@ namespace LAAuto.Services.Impl.Categories
 
         public async Task<List<Category>> ListCategoriesAsync()
         {
-            var entities = await _context.Categories.ToListAsync();
+            var entities = await _context.Categories
+                .ToListAsync();
 
             var categories = entities
                 .Select(Conversion.ConvertCategory)

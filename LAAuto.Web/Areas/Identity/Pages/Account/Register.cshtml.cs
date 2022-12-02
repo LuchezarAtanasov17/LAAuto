@@ -78,6 +78,7 @@ namespace LAAuto.Web.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
+            [RegularExpression("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", ErrorMessage = "Invalid email.")]
             public string Email { get; set; }
 
             /// <summary>
@@ -101,17 +102,19 @@ namespace LAAuto.Web.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "User name")]
+            [StringLength(30)]
             public string UserName { get; set; }
 
             [Display(Name = "First name")]
-
+            [StringLength(30)]
             public string? FirstName { get; set; }
 
             [Display(Name = "Last name")]
-
+            [StringLength(30)]
             public string? LastName { get; set; }
 
             [Display(Name = "Phone number")]
+            [RegularExpression("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$", ErrorMessage = "Invalid phone number.")]
             public string? PhoneNumber { get; set; }
         }
 

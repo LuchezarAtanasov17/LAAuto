@@ -1,8 +1,7 @@
 ﻿using LAAuto.Services.Appointments;
 using ENTITIES = LAAuto.Entities.Models;
-using SERVICES_IMPL_CATEGORIES = LAAuto.Services.Impl.Categories;
-using SERVICES_IMPL_USERS = LAAuto.Services.Impl.Users;
 using SERVICES_IMPL_SERVICES = LAAuto.Services.Impl.Services;
+using SERVICES_IMPL_USERS = LAAuto.Services.Impl.Users;
 
 namespace LAAuto.Services.Impl.Appointments
 {
@@ -24,9 +23,8 @@ namespace LAAuto.Services.Impl.Appointments
                 StartDate = source.StartDate,
                 EndDate = source.EndDate,
                 Description = source.Description,
-                //Category = SERVICES_IMPL_CATEGORIES.Conversion.ConvertCategory(source.Category),
-                //User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
-                //Service = SERVICES_IMPL_SERVICES.Conversion.ConvertService(source.Service)
+                User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
+                Service = SERVICES_IMPL_SERVICES.Conversion.ConvertService(source.Service)
             };
 
             return target;

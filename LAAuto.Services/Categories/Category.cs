@@ -9,8 +9,8 @@ namespace LAAuto.Services.Categories
 
         public string Name { get; set; } = null!;
 
-        public ICollection<Service> Services { get; set; }
+        //public ICollection<Service> Services { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; }
+        //public ICollection<Appointment> Appointments { get; set; }
     }
 }
