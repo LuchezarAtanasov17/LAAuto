@@ -178,7 +178,8 @@ namespace LAAuto.Entities.Migrations
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Location = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
                     OpenTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Image = table.Column<byte[]>(type: "image", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -219,30 +220,6 @@ namespace LAAuto.Entities.Migrations
                     table.ForeignKey(
                         name: "FK_Appointments_Services_ServiceId",
                         column: x => x.ServiceId,
-                        principalTable: "Services",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CategoryService",
-                columns: table => new
-                {
-                    CategoriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ServicesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategoryService", x => new { x.CategoriesId, x.ServicesId });
-                    table.ForeignKey(
-                        name: "FK_CategoryService_Categories_CategoriesId",
-                        column: x => x.CategoriesId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CategoryService_Services_ServicesId",
-                        column: x => x.ServicesId,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -301,7 +278,7 @@ namespace LAAuto.Entities.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"), 0, "cb0a2483-fbb7-4d41-b6c4-32ea367ec95e", "client@mail.com", false, "Pesho", "Peshov", false, null, "CLIENT@MAIL.COM", "CLIENT", null, null, false, null, false, "User" });
+                values: new object[] { new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"), 0, "26c0287f-65db-48af-9b1c-a395ba46c469", "client@mail.com", false, "Pesho", "Peshov", false, null, "CLIENT@MAIL.COM", "CLIENT", null, null, false, null, false, "User" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -315,23 +292,33 @@ namespace LAAuto.Entities.Migrations
 
             migrationBuilder.InsertData(
                 table: "Services",
-                columns: new[] { "Id", "CloseTime", "Description", "Location", "Name", "OpenTime", "UserId" },
-                values: new object[] { new Guid("9226a3f4-35aa-4817-adcd-1c033cf739ad"), new TimeSpan(0, 18, 0, 0, 0), null, "Гр.Пловдив, кв.Кичука, ул.Македония 12", "Autox", new TimeSpan(0, 8, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
+                columns: new[] { "Id", "CloseTime", "Description", "Image", "Location", "Name", "OpenTime", "UserId" },
+                values: new object[] { new Guid("9226a3f4-35aa-4817-adcd-1c033cf739ad"), new TimeSpan(0, 18, 0, 0, 0), null, null, "Гр.Пловдив, кв.Кичука, ул.Македония 12", "Autox", new TimeSpan(0, 8, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
 
             migrationBuilder.InsertData(
                 table: "Services",
-                columns: new[] { "Id", "CloseTime", "Description", "Location", "Name", "OpenTime", "UserId" },
-                values: new object[] { new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new TimeSpan(0, 18, 0, 0, 0), null, "Гр.София, кв.Надежда, ул.Стамболийски 36", "Carx", new TimeSpan(0, 9, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
+                columns: new[] { "Id", "CloseTime", "Description", "Image", "Location", "Name", "OpenTime", "UserId" },
+                values: new object[] { new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new TimeSpan(0, 18, 0, 0, 0), null, null, "Гр.София, кв.Надежда, ул.Стамболийски 36", "Carx", new TimeSpan(0, 9, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
 
             migrationBuilder.InsertData(
                 table: "Services",
-                columns: new[] { "Id", "CloseTime", "Description", "Location", "Name", "OpenTime", "UserId" },
-                values: new object[] { new Guid("fce201d7-e941-4f41-b3be-0c265798ede9"), new TimeSpan(0, 20, 0, 0, 0), null, "Гр.Varna, кв.Владиславово, ул.Георги Минков 3", "CarKing", new TimeSpan(0, 10, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
+                columns: new[] { "Id", "CloseTime", "Description", "Image", "Location", "Name", "OpenTime", "UserId" },
+                values: new object[] { new Guid("fce201d7-e941-4f41-b3be-0c265798ede9"), new TimeSpan(0, 20, 0, 0, 0), null, null, "Гр.Varna, кв.Владиславово, ул.Георги Минков 3", "CarKing", new TimeSpan(0, 10, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
 
             migrationBuilder.InsertData(
                 table: "Appointments",
                 columns: new[] { "Id", "CategoryId", "Description", "EndDate", "ServiceId", "StartDate", "UserId" },
                 values: new object[] { new Guid("9d8afaca-f28c-4fce-bc14-5c3363633323"), new Guid("7294f257-a657-4797-8fce-272319ade2f9"), null, new DateTime(2022, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new DateTime(2022, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
+
+            migrationBuilder.InsertData(
+                table: "CategoryServices",
+                columns: new[] { "CategoryId", "ServiceId", "Id" },
+                values: new object[,]
+                {
+                    { new Guid("0c1237b8-2fe4-43f7-b6dc-2a0a4ef0713d"), new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new Guid("6a62c3f8-aa54-4857-9599-fcbba31da47d") },
+                    { new Guid("7294f257-a657-4797-8fce-272319ade2f9"), new Guid("9226a3f4-35aa-4817-adcd-1c033cf739ad"), new Guid("accfbc90-1486-44b8-9a97-caeecf550391") },
+                    { new Guid("7294f257-a657-4797-8fce-272319ade2f9"), new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new Guid("8317f4c5-3f8b-4020-bbcf-2adb5e30639b") }
+                });
 
             migrationBuilder.InsertData(
                 table: "Ratings",
@@ -393,11 +380,6 @@ namespace LAAuto.Entities.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoryService_ServicesId",
-                table: "CategoryService",
-                column: "ServicesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CategoryServices_ServiceId",
                 table: "CategoryServices",
                 column: "ServiceId");
@@ -437,9 +419,6 @@ namespace LAAuto.Entities.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "CategoryService");
 
             migrationBuilder.DropTable(
                 name: "CategoryServices");

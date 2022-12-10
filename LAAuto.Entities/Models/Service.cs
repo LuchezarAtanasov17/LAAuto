@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LAAuto.Entities.Models
@@ -32,11 +33,8 @@ namespace LAAuto.Entities.Models
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
 
-//      public string Picture { get; set; } Ако снимката е растерна може да си го запиша като стринг и след това в базата само си го конвертира, може и като масив от байтове
-
+        public byte[]? Image { get; set; }
         public ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
-
-        public ICollection<Category> Categories { get; set; } = new HashSet<Category>();
 
         public ICollection<Rating> Ratings { get; set; } = new HashSet<Rating>();
 

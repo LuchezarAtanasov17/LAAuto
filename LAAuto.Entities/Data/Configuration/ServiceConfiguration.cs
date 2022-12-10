@@ -23,6 +23,7 @@ namespace LAAuto.Entities.Data.Configuration
                 Location = "Гр.София, кв.Надежда, ул.Стамболийски 36",
                 OpenTime = TimeOnly.Parse("9:00:00"),
                 CloseTime = TimeOnly.Parse("18:00:00"),
+                Image = null
             };
             services.Add(service);
 
@@ -34,6 +35,7 @@ namespace LAAuto.Entities.Data.Configuration
                 Location = "Гр.Пловдив, кв.Кичука, ул.Македония 12",
                 OpenTime = TimeOnly.Parse("8:00:00"),
                 CloseTime = TimeOnly.Parse("18:00:00"),
+                Image = null
             };
             services.Add(service);
 
@@ -45,6 +47,7 @@ namespace LAAuto.Entities.Data.Configuration
                 Location = "Гр.Varna, кв.Владиславово, ул.Георги Минков 3",
                 OpenTime = TimeOnly.Parse("10:00:00"),
                 CloseTime = TimeOnly.Parse("20:00:00"),
+                Image = null
             };
             services.Add(service);
 

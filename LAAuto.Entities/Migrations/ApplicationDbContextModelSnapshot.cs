@@ -22,21 +22,6 @@ namespace LAAuto.Entities.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CategoryService", b =>
-                {
-                    b.Property<Guid>("CategoriesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ServicesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CategoriesId", "ServicesId");
-
-                    b.HasIndex("ServicesId");
-
-                    b.ToTable("CategoryService");
-                });
-
             modelBuilder.Entity("LAAuto.Entities.Models.Appointment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -134,6 +119,26 @@ namespace LAAuto.Entities.Migrations
                     b.HasIndex("ServiceId");
 
                     b.ToTable("CategoryServices");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = new Guid("7294f257-a657-4797-8fce-272319ade2f9"),
+                            ServiceId = new Guid("9226a3f4-35aa-4817-adcd-1c033cf739ad"),
+                            Id = new Guid("accfbc90-1486-44b8-9a97-caeecf550391")
+                        },
+                        new
+                        {
+                            CategoryId = new Guid("7294f257-a657-4797-8fce-272319ade2f9"),
+                            ServiceId = new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"),
+                            Id = new Guid("8317f4c5-3f8b-4020-bbcf-2adb5e30639b")
+                        },
+                        new
+                        {
+                            CategoryId = new Guid("0c1237b8-2fe4-43f7-b6dc-2a0a4ef0713d"),
+                            ServiceId = new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"),
+                            Id = new Guid("6a62c3f8-aa54-4857-9599-fcbba31da47d")
+                        });
                 });
 
             modelBuilder.Entity("LAAuto.Entities.Models.Rating", b =>
@@ -209,6 +214,9 @@ namespace LAAuto.Entities.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
+
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("image");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -340,7 +348,7 @@ namespace LAAuto.Entities.Migrations
                         {
                             Id = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cb0a2483-fbb7-4d41-b6c4-32ea367ec95e",
+                            ConcurrencyStamp = "26c0287f-65db-48af-9b1c-a395ba46c469",
                             Email = "client@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Pesho",
@@ -459,21 +467,6 @@ namespace LAAuto.Entities.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("CategoryService", b =>
-                {
-                    b.HasOne("LAAuto.Entities.Models.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LAAuto.Entities.Models.Service", null)
-                        .WithMany()
-                        .HasForeignKey("ServicesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("LAAuto.Entities.Models.Appointment", b =>

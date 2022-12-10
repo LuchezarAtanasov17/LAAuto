@@ -60,6 +60,9 @@ namespace LAAuto.Entities.Data
                 builder.Property(x => x.CloseTime)
                     .HasConversion(timeOnlyToTimeSpanConverter);
 
+                builder.Property(x => x.Image)
+                    .HasColumnType("image");
+
                 builder.HasOne(x => x.User)
                     .WithMany(x => x.Services)
                     .HasForeignKey(x => x.UserId)
@@ -85,6 +88,7 @@ namespace LAAuto.Entities.Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryServiceConfiguration());
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new RatingConfiguration());
 
