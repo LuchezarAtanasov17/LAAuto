@@ -1,7 +1,6 @@
 ﻿using LAAuto.Services.Appointments;
 using LAAuto.Services.Categories;
 using LAAuto.Services.Users;
-using Microsoft.AspNetCore.Http;
 
 namespace LAAuto.Services.Services
 {

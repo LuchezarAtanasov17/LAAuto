@@ -78,18 +78,15 @@ namespace LAAuto.Web.Controllers
                 throw new ArgumentNullException(nameof(request));
             }
 
+            request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             request.EndDate = request.StartDate.AddHours(1);
 
-            request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
             var appointmentRequest = Conversion.ConvertCreateAppointmentRequest(request);
-
-            appointmentRequest.Category = await _categoryService.GetCategoryAsync(request.CategoryId);
             appointmentRequest.ServiceId= id;
-
+            
             await _appointmentService.CreateAppointmentAsync(appointmentRequest);
 
-            return Redirect(nameof(List));
+            return RedirectToAction(nameof(List));
         }
 
         [HttpPut]

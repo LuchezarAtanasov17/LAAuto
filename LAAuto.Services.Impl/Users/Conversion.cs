@@ -25,5 +25,23 @@ namespace LAAuto.Services.Impl.Users
 
             return target;
         }
+        public static ENTITIES.User ConvertUser(User source)
+        {
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            var target = new ENTITIES.User()
+            {
+                UserName = source.UserName,
+                FirstName = source.FirstName,
+                LastName = source.LastName,
+                Email = source.Email,
+                PhoneNumber = source.PhoneNumber,
+            };
+
+            return target;
+        }
     }
 }

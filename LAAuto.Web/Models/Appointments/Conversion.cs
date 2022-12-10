@@ -1,5 +1,4 @@
 ﻿using SERVICES_APPOINTMENTS = LAAuto.Services.Appointments;
-using WEB_CATEGORIES = LAAuto.Web.Models.Categories;
 using WEB_SERVICES = LAAuto.Web.Models.Services;
 using WEB_USERS = LAAuto.Web.Models.Users;
 
@@ -24,7 +23,16 @@ namespace LAAuto.Web.Models.Appointments
                 StartDate = source.StartDate,
                 EndDate = source.EndDate,
                 User = WEB_USERS.Conversion.ConvertUser(source.User),
-                Service = WEB_SERVICES.Conversion.ConvertService(source.Service),
+                Service = new WEB_SERVICES.ServiceViewModel
+                {
+                    Id = source.ServiceId,
+                    UserId = source.UserId,
+                    Name = source.Service.Name,
+                    Description = source.Description,
+                    OpenTime = source.Service.OpenTime,
+                    CloseTime = source.Service.CloseTime,
+                    Location = source.Service.Location,
+                },
             };
 
             return target;

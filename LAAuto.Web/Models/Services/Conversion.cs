@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System.Collections;
-using System.Drawing;
-using System.IO;
-using System.Net.Mime;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
-using SERVICES_SERVICES = LAAuto.Services.Services;
+﻿using SERVICES_SERVICES = LAAuto.Services.Services;
 using WEB_CATEGORY = LAAuto.Web.Models.Categories;
 using WEB_USERS = LAAuto.Web.Models.Users;
 

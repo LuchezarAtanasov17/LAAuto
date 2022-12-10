@@ -1,8 +1,8 @@
 ﻿using LAAuto.Entities.Data;
 using LAAuto.Services.Appointments;
-using LAAuto.Services.Services;
 using Microsoft.EntityFrameworkCore;
-using ENTITIES = LAAuto.Entities.Models;
+using SERVICES_IMPL_USERS = LAAuto.Services.Impl.Users;
+using SERVICES_IMPL_SERVICES = LAAuto.Services.Impl.Services;
 
 namespace LAAuto.Services.Impl.Appointments
 {
@@ -27,15 +27,23 @@ namespace LAAuto.Services.Impl.Appointments
                 entities = entities.Where(x => x.ServiceId == serviceId).ToList();
             }
 
-            var appointments = entities
-                .Select(Conversion.ConvertAppointment)
-                .ToList();
+            var appointments = new List<Appointment>();
+            foreach (var entity in entities)
+            {
+                var appointment = Conversion.ConvertAppointment(entity);
+
+                appointment.Service = SERVICES_IMPL_SERVICES.Conversion.ConvertService(entity.Service);
+                appointment.User = SERVICES_IMPL_USERS.Conversion.ConvertUser(entity.User);
+
+                appointments.Add(appointment);
+            }
 
             return appointments;
         }   
 
         public async Task<Appointment> GetAppointmentAsync(Guid id)
         {
+            //TODO: Include Service, User
             var entity = await _context.Appointments.FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity is null)
@@ -44,6 +52,9 @@ namespace LAAuto.Services.Impl.Appointments
             }
 
             var appointment = Conversion.ConvertAppointment(entity);
+
+            appointment.Service = SERVICES_IMPL_SERVICES.Conversion.ConvertService(entity.Service);
+            appointment.User = SERVICES_IMPL_USERS.Conversion.ConvertUser(entity.User);
 
             return appointment;
         }

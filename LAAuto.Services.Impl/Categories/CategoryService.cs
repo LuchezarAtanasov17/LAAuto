@@ -16,7 +16,8 @@ namespace LAAuto.Services.Impl.Categories
 
         public async Task<List<Category>> ListCategoriesAsync(Guid? serviceId = null)
         {
-            var entities = new List<ENTITIES.Category>();
+            var entities = await _context.Categories
+                .ToListAsync();
 
             if (serviceId != null)
             {
@@ -24,11 +25,6 @@ namespace LAAuto.Services.Impl.Categories
                     .Where(x => x.ServiceId == serviceId)
                     .Select(x => x.Category)
                     .ToListAsync();
-            }
-            else
-            {
-                entities = await _context.Categories
-                .ToListAsync();
             }
 
             var categories = entities

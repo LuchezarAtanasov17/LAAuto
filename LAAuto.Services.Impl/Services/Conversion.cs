@@ -23,7 +23,6 @@ namespace LAAuto.Services.Impl.Services
                 Location = source.Location,
                 Description = source.Description,
                 Image = source.Image,
-                User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
             };
 
             return target;

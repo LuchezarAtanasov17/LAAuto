@@ -27,6 +27,6 @@ namespace LAAuto.Web.Models.Services
 
         public IFormFile? Image { get; set; }
 
-        public List<CategoryViewModel> Categories { get; set; }
+        public List<CategoryViewModel>? Categories { get; set; }
     }
 }

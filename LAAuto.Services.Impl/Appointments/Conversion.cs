@@ -23,8 +23,8 @@ namespace LAAuto.Services.Impl.Appointments
                 StartDate = source.StartDate,
                 EndDate = source.EndDate,
                 Description = source.Description,
-                User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
-                Service = SERVICES_IMPL_SERVICES.Conversion.ConvertService(source.Service)
+                //User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
+                //Service = SERVICES_IMPL_SERVICES.Conversion.ConvertService(source.Service)
             };
 
             return target;
