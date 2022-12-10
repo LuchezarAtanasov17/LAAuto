@@ -35,8 +35,6 @@ namespace LAAuto.Web.Models.Ratings
 
             var target = new UpdateRatingRequest()
             {
-                UserId = source.UserId,
-                ServiceId = source.ServiceId,
                 Value = source.Value,
             };
 

@@ -1,0 +1,34 @@
+﻿@using LAAuto.Web.Models.Appointments;
+
+@model List<AppointmentViewModel>
+
+<table class="table">
+  <thead>
+    <tr class="table-dark">
+      <th scope="col">#</th>
+      <th scope="col">Service name</th>
+      <th scope="col">Starts at</th>
+      <th scope="col">Ends at</th>
+      <th scope="col">Description</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+               <tr>
+                 <th scope="row">1</th>
+                 <td>@Model[i].Service.Name</td>
+                 <td>@Model[i].StartDate</td>
+                 <td>@Model[i].EndDate</td>
+                 <td>@Model[i].Description</td>
+                 <td>
+                          <a class="btn btn-warning" asp-controller="Service" asp-action="Update"
+                  asp-route-id="@Model[i].Id">Edit</a>
+                          <a class="ml-2 btn btn-danger" asp-controller="Appointment" asp-action="Delete"
+                   asp-route-id="@Model[i].Id">Delete</a>
+                 </td>
+               </tr>
+        }
+  </tbody>
+</table>

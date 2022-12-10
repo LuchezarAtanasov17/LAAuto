@@ -2,7 +2,7 @@
 {
     public interface ICategoryService
     {
-        Task<List<Category>> ListCategoriesAsync();
+        Task<List<Category>> ListCategoriesAsync(Guid? serviceId = null);
 
         Task<Category> GetCategoryAsync(Guid id);
 

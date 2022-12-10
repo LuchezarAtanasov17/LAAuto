@@ -1,7 +1,4 @@
-﻿
-using LAAuto.Services.Services;
-using LAAuto.Services.Users;
-using LAAuto.Web.Models.Services;
+﻿using LAAuto.Web.Models.Services;
 using LAAuto.Web.Models.Users;
 
 namespace LAAuto.Web.Models.Ratings

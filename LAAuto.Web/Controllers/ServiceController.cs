@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using SERVICES = LAAuto.Services.Services;
-using USERS = LAAuto.Services.Users;
+using SERVICE_USERS = LAAuto.Services.Users;
+using SERVICE_CATEGORIES = LAAuto.Services.Categories;
+using CATEGORIES_MODELS = LAAuto.Web.Models.Categories;
+using System.Runtime.CompilerServices;
 
 namespace LAAuto.Web.Controllers
 {
@@ -11,13 +14,21 @@ namespace LAAuto.Web.Controllers
     public class ServiceController : Controller
     {
         private readonly SERVICES.IServiceService _serviceService;
-        private readonly USERS.IUserService _userService;
+        private readonly SERVICE_USERS.IUserService _userService;
+        private readonly SERVICE_CATEGORIES.ICategoryService _categoryService;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
 
-        public ServiceController(SERVICES.IServiceService serviceService, USERS.IUserService userService)
+        public ServiceController(
+            SERVICES.IServiceService serviceService,
+            SERVICE_USERS.IUserService userService,
+            SERVICE_CATEGORIES.ICategoryService categoryService,
+            IWebHostEnvironment hostEnvironment)
         {
             _serviceService = serviceService ?? throw new ArgumentNullException(nameof(serviceService));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
+            _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
         [HttpGet]
@@ -52,6 +63,7 @@ namespace LAAuto.Web.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Get(
+            [FromRoute]
             Guid id)
         {
             var serviceService = await _serviceService.GetServiceAsync(id);
@@ -59,18 +71,26 @@ namespace LAAuto.Web.Controllers
             var service = Conversion.ConvertService(serviceService);
             //service.User = await _userService.GetUserAsync(service.UserId);
 
-            return View("Details",service);
+            return View("Details", service);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var model = new CreateServiceRequest();
+            var categories = await _categoryService.ListCategoriesAsync();
+
+            var model = new CreateServiceRequest()
+            {
+                Categories = categories
+                .Select(CATEGORIES_MODELS.Conversion.ConvertCategory)
+                .ToList(),
+            };
 
             return View(model);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             CreateServiceRequest request)
         {
@@ -79,36 +99,83 @@ namespace LAAuto.Web.Controllers
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var serviceReqeust = Conversion.ConvertService(request);
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
 
-            serviceReqeust.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            // request.Image = Path.GetFileName();
+            // request.ServiceId = 
+            var categories = await _categoryService.ListCategoriesAsync();
 
-            await _serviceService.CreateServiceAsync(serviceReqeust);
+            request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            return Redirect(nameof(List));
+            var serviceRequest = Conversion.ConvertService(request);
+
+            serviceRequest.Categories = categories
+                .Where(x => request.CategoryIds.Contains(x.Id))
+                .ToList();
+
+            await _serviceService.CreateServiceAsync(serviceRequest);
+
+            return RedirectToAction(nameof(List));
         }
 
-        [HttpPut]
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var service = await _serviceService.GetServiceAsync(id);
+            var categories = await _categoryService.ListCategoriesAsync();
+
+
+            var model = new UpdateServiceRequest()
+            {
+                Id = service.Id,
+                Location = service.Location,
+                Description = service.Description,
+                Name = service.Name,
+                OpenTime = service.OpenTime.ToString(),
+                CloseTime = service.CloseTime.ToString(),
+                Categories = categories
+                    .Select(CATEGORIES_MODELS.Conversion.ConvertCategory)
+                    .ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Update(Guid id, UpdateServiceRequest request)
         {
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(request);
+            //}
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var serviceReqeust = Conversion.ConvertService(request);
+            var categories = await _categoryService.ListCategoriesAsync();
 
-            await _serviceService.UpdateServiceAsync(id, serviceReqeust);
+            var serviceRequest = Conversion.ConvertService(request);
 
-            return Redirect(nameof(Get));
+            serviceRequest.Categories = categories
+                .Where(x => request.CategoryIds.Contains(x.Id))
+                .ToList();
+
+            await _serviceService.UpdateServiceAsync(id, serviceRequest);
+
+            return RedirectToAction(nameof(Get), new {Id = id});
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(
+            [FromRoute]
+            Guid id)
         {
             await _serviceService.DeleteServiceAsync(id);
 
-            return Redirect(nameof(List));
+            return RedirectToAction(nameof(List));
         }
     }
 }

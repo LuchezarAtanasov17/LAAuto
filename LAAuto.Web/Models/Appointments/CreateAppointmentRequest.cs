@@ -1,4 +1,8 @@
-﻿namespace LAAuto.Web.Models.Appointments
+﻿using LAAuto.Web.Models.Categories;
+using LAAuto.Web.Models.Services;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace LAAuto.Web.Models.Appointments
 {
     public class CreateAppointmentRequest
     {
@@ -13,5 +17,9 @@
         public DateTime EndDate { get; set; }
 
         public string? Description { get; set; }
+
+        public ServiceViewModel Service { get; set; }
+
+        public CategoryViewModel Category { get; set; }
     }
 }

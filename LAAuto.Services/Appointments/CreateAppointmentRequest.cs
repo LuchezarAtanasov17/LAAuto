@@ -1,4 +1,6 @@
-﻿namespace LAAuto.Services.Appointments
+﻿using LAAuto.Services.Categories;
+
+namespace LAAuto.Services.Appointments
 {
     public class CreateAppointmentRequest
     {
@@ -13,5 +15,7 @@
         public DateTime EndDate { get; set; }
 
         public string? Description { get; set; }
+
+        public Category Category { get; set; }
     }
 }

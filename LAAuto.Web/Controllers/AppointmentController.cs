@@ -1,18 +1,29 @@
-﻿using SERVICES = LAAuto.Services.Appointments;
+﻿using SERVICES = LAAuto.Services.Services;
+using CATEGORIES = LAAuto.Services.Categories;
+using APPOINTMENTS = LAAuto.Services.Appointments;
 using Microsoft.AspNetCore.Mvc;
 using LAAuto.Web.Models.Appointments;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using SERVICES_MODELS = LAAuto.Web.Models.Services;
+using CATEGORIES_MODELS = LAAuto.Web.Models.Categories;
+using Microsoft.EntityFrameworkCore;
 
 namespace LAAuto.Web.Controllers
 {
     [Authorize]
     public class AppointmentController : Controller
     {
-        private readonly SERVICES.IAppointmentService _appointmentService;
+        private readonly APPOINTMENTS.IAppointmentService _appointmentService;
+        private readonly SERVICES.IServiceService _serviceService;
+        private readonly CATEGORIES.ICategoryService _categoryService;
 
-        public AppointmentController(SERVICES.IAppointmentService appointmentService)
+        public AppointmentController(APPOINTMENTS.IAppointmentService appointmentService, SERVICES.IServiceService serviceService, CATEGORIES.ICategoryService categoryService)
         {
             _appointmentService = appointmentService ?? throw new ArgumentNullException(nameof(appointmentService));
+            _serviceService = serviceService ?? throw new ArgumentNullException(nameof(serviceService));
+            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
+
         }
 
         [HttpGet]
@@ -41,9 +52,25 @@ namespace LAAuto.Web.Controllers
             return View(appointment);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Create(
-            [FromBody]
+            Guid id)
+        {
+            var model = new CreateAppointmentRequest() 
+            {
+                ServiceId = id,
+            };
+
+            var service = await _serviceService.GetServiceAsync(id);
+
+            model.Service = SERVICES_MODELS.Conversion.ConvertService(service);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create2(
+            Guid id,
             CreateAppointmentRequest request)
         {
             if (request is null)
@@ -51,7 +78,14 @@ namespace LAAuto.Web.Controllers
                 throw new ArgumentNullException(nameof(request));
             }
 
+            request.EndDate = request.StartDate.AddHours(1);
+
+            request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
             var appointmentRequest = Conversion.ConvertCreateAppointmentRequest(request);
+
+            appointmentRequest.Category = await _categoryService.GetCategoryAsync(request.CategoryId);
+            appointmentRequest.ServiceId= id;
 
             await _appointmentService.CreateAppointmentAsync(appointmentRequest);
 
@@ -73,8 +107,9 @@ namespace LAAuto.Web.Controllers
             return Redirect(nameof(Get));
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(
+            [FromRoute]
+            Guid id)
         {
             await _appointmentService.DeleteAppointmentAsync(id);
 
