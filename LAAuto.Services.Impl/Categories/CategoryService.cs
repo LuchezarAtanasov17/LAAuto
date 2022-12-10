@@ -1,6 +1,7 @@
 ﻿using LAAuto.Entities.Data;
 using LAAuto.Services.Categories;
 using Microsoft.EntityFrameworkCore;
+using ENTITIES = LAAuto.Entities.Models;
 
 namespace LAAuto.Services.Impl.Categories
 {
@@ -13,10 +14,22 @@ namespace LAAuto.Services.Impl.Categories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<List<Category>> ListCategoriesAsync()
+        public async Task<List<Category>> ListCategoriesAsync(Guid? serviceId = null)
         {
-            var entities = await _context.Categories
+            var entities = new List<ENTITIES.Category>();
+
+            if (serviceId != null)
+            {
+                entities = await _context.CategoryServices
+                    .Where(x => x.ServiceId == serviceId)
+                    .Select(x => x.Category)
+                    .ToListAsync();
+            }
+            else
+            {
+                entities = await _context.Categories
                 .ToListAsync();
+            }
 
             var categories = entities
                 .Select(Conversion.ConvertCategory)

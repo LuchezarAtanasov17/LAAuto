@@ -37,8 +37,6 @@ namespace LAAuto.Services.Impl.Ratings
 
             var target = new ENTITIES.Rating()
             {
-                UserId = source.UserId,
-                ServiceId = source.ServiceId,
                 Value = source.Value,
             };
 

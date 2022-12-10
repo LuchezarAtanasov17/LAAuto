@@ -1,20 +1,29 @@
 ﻿using LAAuto.Entities.Data;
+using LAAuto.Services.Appointments;
+using LAAuto.Services.Categories;
 using LAAuto.Services.Ratings;
 using LAAuto.Services.Services;
 using Microsoft.EntityFrameworkCore;
+using ENTITIES = LAAuto.Entities.Models;
 
 namespace LAAuto.Services.Impl.Services
 {
     public class ServiceService : IServiceService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IAppointmentService _appointmentService;
+        private readonly ICategoryService _categoryService;
         private readonly IRatingService _ratingService;
 
         public ServiceService(
             ApplicationDbContext context,
+             IAppointmentService appointmentService,
+            ICategoryService categoryService,
             IRatingService ratingService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _appointmentService = appointmentService ?? throw new ArgumentNullException(nameof(appointmentService));
+            _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
             _ratingService = ratingService ?? throw new ArgumentNullException(nameof(ratingService));
         }
 
@@ -36,6 +45,13 @@ namespace LAAuto.Services.Impl.Services
                     .Where(x => x.Categories
                         .Any(c => c.Name == categoryFilter))
                     .ToList();
+            }
+
+            foreach (var service in services)
+            {
+                service.AverageRating = await CalculateAverageServiceRatingAsync(service.Id);
+                service.Appointments = await _appointmentService.ListAppointmentsAsync(service.Id);
+                service.Categories = await _categoryService.ListCategoriesAsync(serviceId: service.Id);
             }
 
             return services;
@@ -74,6 +90,9 @@ namespace LAAuto.Services.Impl.Services
 
             //service.AverageRating = await CalculateAverageServiceRatingAsync(id);
 
+            service.Appointments = await _appointmentService.ListAppointmentsAsync(service.Id);
+            service.Categories = await _categoryService.ListCategoriesAsync(serviceId: service.Id);
+
             return service;
         }
 
@@ -87,6 +106,19 @@ namespace LAAuto.Services.Impl.Services
             var entity = Conversion.ConvertService(request);
 
             await _context.Services.AddAsync(entity);
+
+            foreach (var category in request.Categories)
+            {
+                var categoryService = new ENTITIES.CategoryService
+                {
+                    Id = Guid.NewGuid(),
+                    ServiceId = entity.Id,
+                    CategoryId = category.Id,
+                };
+
+                await _context.CategoryServices.AddAsync(categoryService);
+            }
+
             await _context.SaveChangesAsync();
         }
         public async Task UpdateServiceAsync(Guid id, UpdateServiceRequest request)
@@ -104,13 +136,26 @@ namespace LAAuto.Services.Impl.Services
                 throw new ObjectNotFoundException($"Could not find service with ID {id}.");
             }
 
-            entity.UserId = request.UserId;
             entity.Name = request.Name;
             entity.OpenTime = request.OpenTime;
             entity.CloseTime = request.CloseTime;
             entity.Location = request.Location;
             entity.Description = request.Description;
 
+            var categoryServices = _context.CategoryServices.Where(x => x.ServiceId == entity.Id);
+            _context.CategoryServices.RemoveRange(categoryServices);
+
+            foreach (var category in request.Categories)
+            {
+                var categoryService = new ENTITIES.CategoryService
+                {
+                    Id = Guid.NewGuid(),
+                    ServiceId = entity.Id,
+                    CategoryId = category.Id,
+                };
+
+                await _context.CategoryServices.AddAsync(categoryService);
+            }
             await _context.SaveChangesAsync();
         }
 
@@ -127,23 +172,7 @@ namespace LAAuto.Services.Impl.Services
             _context.Remove(entity);
             await _context.SaveChangesAsync();
         }
-        public async Task MakeAppointmentAsync(Guid id, Guid currentUserId)
-        {
-            var entity = await _context.Services
-                .FirstOrDefaultAsync(x => x.Id == id);
-
-            if (entity is null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
-            var service = Conversion.ConvertService(entity);
-
-            var appointment = service.Appointments.FirstOrDefault(x => x.UserId == currentUserId);
-
-            // appointment.
-        }
-
+     
         public async Task CancelAppointmentAsync(Guid id)
         {
             var service = await _context.Services
@@ -151,7 +180,7 @@ namespace LAAuto.Services.Impl.Services
 
             if (service is null)
             {
-                throw new ArgumentNullException(nameof(service));
+                throw new ObjectNotFoundException($"Could not find service with ID {id}");
             }
         }
 
@@ -164,7 +193,9 @@ namespace LAAuto.Services.Impl.Services
 
             var ratings = await _ratingService.ListRatingsAsync(filter);
 
-            double average = ratings.Average(x => x.Value);
+            double average = ratings.Count > 0
+                ? ratings.Average(x => x.Value)
+                : 0;
 
             return average;
         }

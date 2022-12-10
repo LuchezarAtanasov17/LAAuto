@@ -28,13 +28,20 @@
                 <b>@Model.CloseTime</b>
             </p>
             <p>@Model.Description</p>
-            <p>
-                Category:
-                @foreach (var category in Model.Categories)
-                {
-                    <b>@category.Name</b>
-                }
-            </p>
+            @if (Model.Categories.Count == 0)
+            {
+                <p>No categories</p>
+            }
+            else
+            {
+                <p>
+                    Categories:
+                    @foreach (var category in Model.Categories)
+                    {
+                        <b>@category.Name</b>
+                    }
+                </p>
+            }
             <div class="form-inline">
                 @if (this.User.Identity.IsAuthenticated)
                 {
@@ -48,8 +55,8 @@
                     else
                     {
                         <form class="ml-2" asp-controller="Appointment"
-                      asp-action="Create" asp-route-id="@Model.Id" method="post">
-                            <input class="btn btn-primary" type="submit" value="Make an appointment" />
+                      asp-action="Create" asp-route-id="@Model.Id" method="get">
+                            <input class="btn btn-primary" type="submit" value="Make an appointment"/>
                         </form>
                     }
                 }

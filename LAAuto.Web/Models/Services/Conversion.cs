@@ -1,8 +1,13 @@
-﻿using SERVICES_SERVICES = LAAuto.Services.Services;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Collections;
+using System.Drawing;
+using System.IO;
+using System.Net.Mime;
+using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using SERVICES_SERVICES = LAAuto.Services.Services;
 using WEB_CATEGORY = LAAuto.Web.Models.Categories;
-using WEB_APPOINTMENT = LAAuto.Web.Models.Appointments;
 using WEB_USERS = LAAuto.Web.Models.Users;
-
 
 namespace LAAuto.Web.Models.Services
 {
@@ -25,56 +30,87 @@ namespace LAAuto.Web.Models.Services
                 CloseTime = source.CloseTime,
                 Location = source.Location,
                 User = WEB_USERS.Conversion.ConvertUser(source.User),
+                //Image = source.Image != null && source.Image.Length > 0
+                //    ? ConvertImage(source.Image)
+                //    : null,
                 Categories = source.Categories
                     .Select(WEB_CATEGORY.Conversion.ConvertCategory)
-                    .ToHashSet(),
+                    .ToHashSet()
                 //Appointments = source.Appointments
                 //    .Select(WEB_APPOINTMENT.Conversion.ConvertAppointment)
                 //    .ToHashSet(),
-                
+
                 //AverageRating = source.AverageRating,
             };
 
             return target;
         }
 
-        public static SERVICES_SERVICES.CreateServiceRequest ConvertService(CreateServiceRequest source)
+    public static SERVICES_SERVICES.CreateServiceRequest ConvertService(CreateServiceRequest source)
+    {
+        if (source is null)
         {
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            var target = new SERVICES_SERVICES.CreateServiceRequest
-            {
-                Name = source.Name,
-                Description = source.Description,
-                OpenTime = new TimeOnly(),
-                CloseTime = new TimeOnly(),
-                Location = source.Location,
-            };
-
-            return target;
+            throw new ArgumentNullException(nameof(source));
         }
 
-        public static SERVICES_SERVICES.UpdateServiceRequest ConvertService(UpdateServiceRequest source)
+        var target = new SERVICES_SERVICES.CreateServiceRequest
         {
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            UserId = source.UserId,
+            Name = source.Name,
+            Description = source.Description,
+            OpenTime = TimeOnly.Parse(source.OpenTime),
+            CloseTime = TimeOnly.Parse(source.CloseTime),
+            Location = source.Location,
+            //Image = source.Image != null
+            //    ? ConvertImage(source.Image)
+            //    : null
+        };
 
-            var target = new SERVICES_SERVICES.UpdateServiceRequest
-            {
-                UserId = source.UserId,
-                Name = source.Name,
-                Description = source.Description,
-                OpenTime = source.OpenTime,
-                CloseTime = source.CloseTime,
-                Location = source.Location,
-            };
+        return target;
+    }
 
-            return target;
+    public static SERVICES_SERVICES.UpdateServiceRequest ConvertService(UpdateServiceRequest source)
+    {
+        if (source is null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        var target = new SERVICES_SERVICES.UpdateServiceRequest
+        {
+            Id = source.Id,
+            Name = source.Name,
+            Description = source.Description,
+            OpenTime = TimeOnly.Parse(source.OpenTime),
+            CloseTime = TimeOnly.Parse(source.CloseTime),
+            Location = source.Location,
+            //Image = source.Image
+        };
+
+        return target;
+    }
+
+        //private static IFormFile ConvertImage(byte[] bytes)
+        //{
+        //    using (var ms = new MemoryStream(bytes))
+        //    {
+        //        file.CopyTo(ms);
+        //        // act on the Base64 data
+        //
+        //        return file;
+        //    }
+        //}
+
+        private static byte[] ConvertImage(IFormFile image)
+    {
+        using (var ms = new MemoryStream())
+        {
+            image.CopyTo(ms);
+            var fileBytes = ms.ToArray();
+            // act on the Base64 data
+
+            return fileBytes;
         }
     }
+}
 }

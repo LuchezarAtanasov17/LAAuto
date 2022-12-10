@@ -1,9 +1,6 @@
 ﻿using LAAuto.Services.Services;
 using ENTITIES = LAAuto.Entities.Models;
-using SERVICES_IMPL_CATEGORY = LAAuto.Services.Impl.Categories;
-using SERVICES_IMPL_APPOINTMENT = LAAuto.Services.Impl.Appointments;
 using SERVICES_IMPL_USERS = LAAuto.Services.Impl.Users;
-using LAAuto.Services.Users;
 
 namespace LAAuto.Services.Impl.Services
 {
@@ -25,15 +22,8 @@ namespace LAAuto.Services.Impl.Services
                 CloseTime = source.CloseTime,
                 Location = source.Location,
                 Description = source.Description,
+                Image = source.Image,
                 User = SERVICES_IMPL_USERS.Conversion.ConvertUser(source.User),
-                Categories = source.Categories
-                    .Select(SERVICES_IMPL_CATEGORY.Conversion.ConvertCategory)
-                    .ToHashSet(),
-                //Appointments = source.Appointments
-                //    .Select(SERVICES_IMPL_APPOINTMENT.Conversion.ConvertAppointment)
-                //    .ToHashSet(),
-
-                //TODO: AverageRating 
             };
 
             return target;
@@ -54,6 +44,7 @@ namespace LAAuto.Services.Impl.Services
                 CloseTime = source.CloseTime,
                 Location = source.Location,
                 Description = source.Description,
+                Image = source.Image,
             };
 
             return target;

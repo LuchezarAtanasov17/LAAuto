@@ -14,8 +14,6 @@
 
         Task DeleteServiceAsync(Guid id);
 
-        Task MakeAppointmentAsync(Guid id, Guid currentUserId);
-
         Task CancelAppointmentAsync(Guid id);
     }
 }

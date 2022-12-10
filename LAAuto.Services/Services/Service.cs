@@ -1,6 +1,7 @@
 ﻿using LAAuto.Services.Appointments;
 using LAAuto.Services.Categories;
 using LAAuto.Services.Users;
+using Microsoft.AspNetCore.Http;
 
 namespace LAAuto.Services.Services
 {
@@ -21,6 +22,8 @@ namespace LAAuto.Services.Services
         public TimeOnly CloseTime { get; set; }
 
         public double AverageRating { get; set; }
+
+        public byte[]? Image { get; set; }
 
         public User User { get; set; }
 

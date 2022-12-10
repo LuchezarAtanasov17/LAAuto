@@ -1,36 +1,36 @@
 ﻿@using LAAuto.Web.Models.Services
 
-@model CreateServiceRequest
+@model UpdateServiceRequest
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form enctype="multipart/form-data" method="post">
+        <input type="hidden" asp-for="@Model.Id" />
+        <form method="post">
             <div class="mb-3">
-                <label asp-for="@Model.Name" class="form-label">Car service name</label>
+                <label asp-for="@Model.Name" class="form-label">Name</label>
                 <input asp-for="@Model.Name" class="form-control" aria-required="true" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Description" class="form-label">Description</label>
+                <input asp-for="@Model.Description" class="form-control" aria-required="true" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.Location" class="form-label">Location</label>
                 <input asp-for="@Model.Location" class="form-control" aria-required="true" />
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
-            <div class="mb-3">
-                <label asp-for="@Model.Description" class="form-label">Description</label>
-                <input type="text" asp-for="@Model.Description" class="form-control" aria-required="true" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
             <div class="form-group">
-                <label asp-for="Categories"></label>
-                <select asp-for="CategoryIds" class="form-control">
+                <label asp-for="CategoryIds"></label>
+                <select asp-for="CategoryIds" class="form-control" multiple>
                     @foreach (var category in Model.Categories)
                     {
-                            <option value="@category.Id">@category.Name</option>
+                                <option value="@category.Id">@category.Name</option>
                     }
                 </select>
                 <span asp-validation-for="CategoryIds" class="small text-danger"></span>
             </div>
-            
             <div class="mb-3">
                 <label asp-for="@Model.OpenTime" class="form-label">OpenTime</label><br />
                     <select asp-for="@Model.OpenTime">
@@ -91,14 +91,8 @@
                     </select>
                 <span asp-validation-for="CloseTime" class="text-danger"></span>
             </div>
-            <div id="upload-image" class="form-floating">
-                <label asp-for="Image"></label>
-            <input id="upload" asp-for="Image" multiple accept="image/*">
-            <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
             <div class="mb-3">
-                <input class="btn btn-primary" asp-controller="Service" asp-action="Create" type="submit" value="Save" />
-                <a class="btn btn-secondary" asp-controller="Service" asp-action="List">Cancel</a>
+                <input class="btn btn-primary" asp-controller="Service" asp-action="Update" type="submit" value="Save" />
             </div>
         </form>
     </div>
