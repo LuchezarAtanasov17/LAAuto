@@ -44,7 +44,10 @@ namespace LAAuto.Services.Impl.Appointments
         public async Task<Appointment> GetAppointmentAsync(Guid id)
         {
             //TODO: Include Service, User
-            var entity = await _context.Appointments.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _context.Appointments
+                .Include(x => x.Service)
+                .Include(x=> x.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity is null)
             {

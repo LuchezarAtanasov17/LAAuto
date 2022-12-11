@@ -16,6 +16,8 @@ namespace LAAuto.Web.Models.Appointments
 
         public DateTime EndDate { get; set; }
 
+        public int StartDateHour { get; set; }
+
         public string? Description { get; set; }
 
         public ServiceViewModel Service { get; set; }

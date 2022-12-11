@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LAAuto.Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221209214717_Initial")]
+    [Migration("20221211131544_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,6 +202,22 @@ namespace LAAuto.Entities.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7c35c18b-3177-4ad1-8be7-141693a7272f"),
+                            ConcurrencyStamp = "68be544a-11c3-493d-b40f-d6fa9b362c52",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = new Guid("b61a261f-5220-4176-9d49-ff18ecbd5b18"),
+                            ConcurrencyStamp = "3a197fb9-6842-4b1a-ada3-89c75a45eaba",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("LAAuto.Entities.Models.Service", b =>
@@ -350,7 +366,7 @@ namespace LAAuto.Entities.Migrations
                         {
                             Id = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "26c0287f-65db-48af-9b1c-a395ba46c469",
+                            ConcurrencyStamp = "f9201f57-4de8-4db7-8538-3164fdbbc375",
                             Email = "client@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Pesho",

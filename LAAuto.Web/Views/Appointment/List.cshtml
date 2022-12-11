@@ -14,16 +14,16 @@
     </tr>
   </thead>
   <tbody>
-        @for (int i = 1; i <= Model.Count; i++)
+        @for (int i = 0; i < Model.Count; i++)
         {
                <tr>
-                 <th scope="row">@i</th>
+                 <th scope="row">@(i+1)</th>
                  <td>@Model[i].Service.Name</td>
                  <td>@Model[i].StartDate</td>
                  <td>@Model[i].EndDate</td>
                  <td>@Model[i].Description</td>
                  <td>
-                          <a class="btn btn-warning" asp-controller="Service" asp-action="Update"
+                          <a class="btn btn-warning" asp-controller="Appointment" asp-action="Update"
                   asp-route-id="@Model[i].Id">Edit</a>
                           <a class="ml-2 btn btn-danger" asp-controller="Appointment" asp-action="Delete"
                    asp-route-id="@Model[i].Id">Delete</a>

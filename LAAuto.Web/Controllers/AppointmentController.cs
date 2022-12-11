@@ -42,7 +42,6 @@ namespace LAAuto.Web.Controllers
         [HttpGet]
         [AllowAnonymous] // ?????????????????????
         public async Task<IActionResult> Get(
-            [FromQuery]
             Guid id)
         {
             var serviceAppointment = await _appointmentService.GetAppointmentAsync(id);
@@ -79,6 +78,7 @@ namespace LAAuto.Web.Controllers
             }
 
             request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            request.StartDate = request.StartDate.AddHours(request.StartDateHour);
             request.EndDate = request.StartDate.AddHours(1);
 
             var appointmentRequest = Conversion.ConvertCreateAppointmentRequest(request);
@@ -89,7 +89,27 @@ namespace LAAuto.Web.Controllers
             return RedirectToAction(nameof(List));
         }
 
-        [HttpPut]
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var appointment = await _appointmentService.GetAppointmentAsync(id);
+            var service = await _serviceService.GetServiceAsync(appointment.ServiceId);
+
+            var model = new UpdateAppointmentRequest()
+            {
+                Id = appointment.Id,
+                UserId = appointment.UserId,
+                ServiceId = appointment.ServiceId,
+                Description = appointment.Description,
+                StartDate = appointment.StartDate,
+                EndDate = appointment.EndDate,
+                Service = SERVICES_MODELS.Conversion.ConvertService(service)
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Update(Guid id, UpdateAppointmentRequest request)
         {
             if (request is null)
@@ -98,10 +118,14 @@ namespace LAAuto.Web.Controllers
             }
 
             var serviceRequest = Conversion.ConvertUpdateAppointmentRequest(request);
+            serviceRequest.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            serviceRequest.StartDate = request.StartDate.AddHours(request.StartDateHour);
+            serviceRequest.EndDate = serviceRequest.StartDate.AddHours(1);
 
             await _appointmentService.UpdateAppointmentAsync(id, serviceRequest);
 
-            return Redirect(nameof(Get));
+            return RedirectToAction(nameof(List));
         }
 
         public async Task<IActionResult> Delete(
@@ -110,7 +134,7 @@ namespace LAAuto.Web.Controllers
         {
             await _appointmentService.DeleteAppointmentAsync(id);
 
-            return Redirect(nameof(List));
+            return RedirectToAction(nameof(List));
         }
     }
 }

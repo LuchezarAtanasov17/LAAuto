@@ -18,6 +18,17 @@ namespace LAAuto.Entities.Data.Configuration
                 FirstName = "Pesho",
                 LastName = "Peshov"
             });
+
+            //builder.HasData(new User()
+            //{
+            //    Id = Guid.Parse("1456c79b-7080-4586-8467-900a3cb033fe"),
+            //    UserName = "Administrator",
+            //    NormalizedUserName = "ADMINISTRATOR",
+            //    Email = "admin@gmail.com",
+            //    NormalizedEmail = "ADMIN@GMAIL.COM",
+            //    FirstName = "Luchezar",
+            //    LastName = "Atanasov",
+            //});
         }
     }
 }

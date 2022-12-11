@@ -1,5 +1,6 @@
 ﻿using LAAuto.Entities.Data.Configuration;
 using LAAuto.Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,7 +57,7 @@ namespace LAAuto.Entities.Data
             {
                 builder.Property(x => x.OpenTime)
                     .HasConversion(timeOnlyToTimeSpanConverter);
-                
+
                 builder.Property(x => x.CloseTime)
                     .HasConversion(timeOnlyToTimeSpanConverter);
 
@@ -91,6 +92,8 @@ namespace LAAuto.Entities.Data
             modelBuilder.ApplyConfiguration(new CategoryServiceConfiguration());
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new RatingConfiguration());
+            modelBuilder.ApplyConfiguration(new IdentityRoleConfiguration());
+            //modelBuilder.ApplyConfiguration(new IdentityUserRoleConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

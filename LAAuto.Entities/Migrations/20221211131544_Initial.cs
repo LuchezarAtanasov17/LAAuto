@@ -276,9 +276,18 @@ namespace LAAuto.Entities.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { new Guid("7c35c18b-3177-4ad1-8be7-141693a7272f"), "68be544a-11c3-493d-b40f-d6fa9b362c52", "Administrator", "ADMINISTRATOR" },
+                    { new Guid("b61a261f-5220-4176-9d49-ff18ecbd5b18"), "3a197fb9-6842-4b1a-ada3-89c75a45eaba", "User", "USER" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"), 0, "26c0287f-65db-48af-9b1c-a395ba46c469", "client@mail.com", false, "Pesho", "Peshov", false, null, "CLIENT@MAIL.COM", "CLIENT", null, null, false, null, false, "User" });
+                values: new object[] { new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"), 0, "f9201f57-4de8-4db7-8538-3164fdbbc375", "client@mail.com", false, "Pesho", "Peshov", false, null, "CLIENT@MAIL.COM", "CLIENT", null, null, false, null, false, "User" });
 
             migrationBuilder.InsertData(
                 table: "Categories",

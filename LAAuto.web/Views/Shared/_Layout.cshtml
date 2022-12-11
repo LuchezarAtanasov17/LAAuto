@@ -30,6 +30,12 @@
                             <li class="nav-item justify-content-left">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Appointment" asp-action="List">My appointments</a>
                             </li>
+                            @if (this.User.IsInRole("Administrator"))
+                            {
+                                    <li class="nav-item justify-content-left">
+                                        <a class="nav-link text-white" asp-area="Admin" asp-controller="Admin" asp-action="Index">Go to admin area</a>
+                                    </li>
+                            }
                         }
                     </ul>
                     <partial name="_LoginPartial" />
