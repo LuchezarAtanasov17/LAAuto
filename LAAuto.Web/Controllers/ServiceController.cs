@@ -1,6 +1,7 @@
 ﻿using LAAuto.Web.Models.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Immutable;
 using System.Security.Claims;
 using CATEGORIES_MODELS = LAAuto.Web.Models.Categories;
 using SERVICE_CATEGORIES = LAAuto.Services.Categories;
@@ -81,8 +82,8 @@ namespace LAAuto.Web.Controllers
             var model = new CreateServiceRequest()
             {
                 Categories = categories
-                .Select(CATEGORIES_MODELS.Conversion.ConvertCategory)
-                .ToList(),
+                    .Select(CATEGORIES_MODELS.Conversion.ConvertSelectCategory)
+                    .ToList(),
             };
 
             return View(model);
@@ -103,16 +104,13 @@ namespace LAAuto.Web.Controllers
                 return View(request);
             }
 
-            // request.Image = Path.GetFileName();
-            // request.ServiceId = 
-            var categories = await _categoryService.ListCategoriesAsync();
-
             request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             var serviceRequest = Conversion.ConvertService(request);
 
-            serviceRequest.Categories = categories
-                .Where(x => request.CategoryIds.Contains(x.Id))
+            serviceRequest.CategoryIds = request.Categories
+                .Where(x => x.IsSelected)
+                .Select(x => x.Id)
                 .ToList();
 
             await _serviceService.CreateServiceAsync(serviceRequest);
@@ -136,9 +134,17 @@ namespace LAAuto.Web.Controllers
                 OpenTime = service.OpenTime.ToString(),
                 CloseTime = service.CloseTime.ToString(),
                 Categories = categories
-                    .Select(CATEGORIES_MODELS.Conversion.ConvertCategory)
+                    .Select(CATEGORIES_MODELS.Conversion.ConvertSelectCategory)
                     .ToList()
             };
+
+            foreach (var category in model.Categories)
+            {
+                if (service.Categories.Select(x => x.Id).Contains(category.Id))
+                {
+                    category.IsSelected = true;
+                }
+            }
 
             return View(model);
         }
@@ -155,12 +161,11 @@ namespace LAAuto.Web.Controllers
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var categories = await _categoryService.ListCategoriesAsync();
-
             var serviceRequest = Conversion.ConvertService(request);
 
-            serviceRequest.Categories = categories
-                .Where(x => request.CategoryIds.Contains(x.Id))
+            serviceRequest.Categories = request.Categories
+                .Where(x=>x.IsSelected == true)
+                .Select(CATEGORIES_MODELS.Conversion.ConvertSelectCategory)
                 .ToList();
 
             await _serviceService.UpdateServiceAsync(id, serviceRequest);
