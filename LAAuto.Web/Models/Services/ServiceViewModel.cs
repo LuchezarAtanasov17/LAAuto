@@ -25,6 +25,8 @@ namespace LAAuto.Web.Models.Services
 
         public IFormFile? Image { get; set; }
 
+
+
         public UserViewModel User { get; set; }
 
         public ICollection<CategoryViewModel> Categories { get; set; }

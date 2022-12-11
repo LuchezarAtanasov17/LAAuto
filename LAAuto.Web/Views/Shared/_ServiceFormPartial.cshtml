@@ -21,14 +21,18 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Categories"></label>
-                <select asp-for="CategoryIds" class="form-control">
-                    @foreach (var category in Model.Categories)
-                    {
-                            <option value="@category.Id">@category.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="CategoryIds" class="small text-danger"></span>
+                <label asp-for="Categories">Categories:</label>
+                <br />
+                @for (int i = 0; i < @Model.Categories.Count; i++)
+                {
+                        <input type="checkbox" asp-for="@Model.Categories[i].IsSelected" />
+                        <label>@Model.Categories[i].Name</label>
+                        <input type="hidden" asp-for="@Model.Categories[i].Id" />
+                        <input type="hidden" asp-for="@Model.Categories[i].Name" />
+
+                        <br />
+                }
+                <br />
             </div>
             
             <div class="mb-3">

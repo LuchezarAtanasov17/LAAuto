@@ -1,11 +1,7 @@
 ﻿using LAAuto.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 
 namespace LAAuto.Entities.Data.Configuration
 {
@@ -19,8 +15,8 @@ namespace LAAuto.Entities.Data.Configuration
                 ServiceId = Guid.Parse("e17b327f-eee6-4011-9905-bc8360cd5e66"),
                 UserId = Guid.Parse("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                 CategoryId = Guid.Parse("7294f257-a657-4797-8fce-272319ade2f9"),
-                StartDate = DateTime.Parse("19-12-2022"),
-                EndDate = DateTime.Parse("20-12-2022")
+                StartDate = DateTime.ParseExact("19-12-2022", "dd-MM-yyyy", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact("20-12-2022", "dd-MM-yyyy", CultureInfo.InvariantCulture)
             });
         }
     }

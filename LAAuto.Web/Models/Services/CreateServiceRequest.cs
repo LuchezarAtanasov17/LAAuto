@@ -1,15 +1,11 @@
-﻿using LAAuto.Entities.Models;
-using LAAuto.Web.Models.Categories;
+﻿using LAAuto.Web.Models.Categories;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
 
 namespace LAAuto.Web.Models.Services
 {
     public class CreateServiceRequest
     {
         public Guid UserId { get; set; }
-
-        public List<Guid> CategoryIds { get; set; }
 
         [Required]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
@@ -27,6 +23,6 @@ namespace LAAuto.Web.Models.Services
 
         public IFormFile? Image { get; set; }
 
-        public List<CategoryViewModel>? Categories { get; set; }
+        public List<SelectCategoryViewModel> Categories { get; set; }
     }
 }

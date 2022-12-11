@@ -1,12 +1,12 @@
-﻿using LAAuto.Services.Categories;
-using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LAAuto.Services.Services
 {
     public class CreateServiceRequest
     {
         public Guid UserId { get; set; }
+
+        public List<Guid> CategoryIds { get; set; }
 
         [Required]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
@@ -24,8 +24,5 @@ namespace LAAuto.Services.Services
         public TimeOnly CloseTime { get; set; }
 
         public byte[]? Image { get; set; }
-
-        public List<Category> Categories { get; set; }
-
     }
 }

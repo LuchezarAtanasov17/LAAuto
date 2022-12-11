@@ -24,6 +24,6 @@ namespace LAAuto.Web.Models.Services
         public string CloseTime { get; set; }
         public IFormFile Image { get; set; }
 
-        public List<CategoryViewModel> Categories { get; set; }
+        public List<SelectCategoryViewModel> Categories { get; set; }
     }
 }

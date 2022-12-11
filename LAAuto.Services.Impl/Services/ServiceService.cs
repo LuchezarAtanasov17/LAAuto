@@ -107,13 +107,13 @@ namespace LAAuto.Services.Impl.Services
 
             await _context.Services.AddAsync(entity);
 
-            foreach (var category in request.Categories)
+            foreach (var categoryId in request.CategoryIds)
             {
                 var categoryService = new ENTITIES.CategoryService
                 {
                     Id = Guid.NewGuid(),
                     ServiceId = entity.Id,
-                    CategoryId = category.Id,
+                    CategoryId = categoryId,
                 };
 
                 await _context.CategoryServices.AddAsync(categoryService);
@@ -121,6 +121,7 @@ namespace LAAuto.Services.Impl.Services
 
             await _context.SaveChangesAsync();
         }
+
         public async Task UpdateServiceAsync(Guid id, UpdateServiceRequest request)
         {
             if (request is null)
