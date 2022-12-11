@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SERVICES = LAAuto.Services.Categories;
-using LAAuto.Web.Models.Categories;
 using Microsoft.AspNetCore.Authorization;
+using LAAuto.Web.Models.Categories;
 
-namespace LAAuto.Web.Controllers
+namespace LAAuto.Web.Areas.Admin.Controllers
 {
-    [Authorize]
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
         private readonly SERVICES.ICategoryService _categoryService;
 
@@ -28,20 +27,15 @@ namespace LAAuto.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(
-           [FromQuery]
-            Guid id)
+        public IActionResult Create()
         {
-            var categoryService = await _categoryService.GetCategoryAsync(id);
+            var model = new CreateCategoryRequest();
 
-            var category = Conversion.ConvertCategory(categoryService);
-
-            return View(category);
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(
-            [FromBody]
             CreateCategoryRequest request)
         {
             if (request is null)
@@ -56,12 +50,13 @@ namespace LAAuto.Web.Controllers
             return Redirect(nameof(List));
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(
+            [FromRoute]
+            Guid id)
         {
             await _categoryService.DeleteCategoryAsync(id);
 
-            return Redirect(nameof(List));
+            return RedirectToAction(nameof(List));
         }
     }
 }

@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using LAAuto.Web.Models.Users;
 
-namespace LAAuto.Web.Controllers
+namespace LAAuto.Web.Areas.Admin.Controllers
 {
-    [Authorize]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly SERVICES.IUserService _userService;
 
