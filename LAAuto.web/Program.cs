@@ -3,10 +3,8 @@ using LAAuto.Services.Appointments;
 using LAAuto.Services.Categories;
 using LAAuto.Services.Impl.Appointments;
 using LAAuto.Services.Impl.Categories;
-using LAAuto.Services.Impl.Ratings;
 using LAAuto.Services.Impl.Services;
 using LAAuto.Services.Impl.Users;
-using LAAuto.Services.Ratings;
 using LAAuto.Services.Services;
 using LAAuto.Services.Users;
 using Microsoft.EntityFrameworkCore;
@@ -27,12 +25,12 @@ builder.Services.AddDefaultIdentity<ENTITIES.User>(options =>
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
 })
+    .AddRoles<ENTITIES.Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -60,6 +58,16 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+
+    endpoints.MapRazorPages();
+});
 
 // Migrate database
 using (var scope = app.Services.CreateScope())
