@@ -1,12 +1,9 @@
 ﻿using LAAuto.Entities.Data;
-using LAAuto.Services.Appointments;
 using LAAuto.Services.Categories;
-using LAAuto.Services.Ratings;
 using LAAuto.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using ENTITIES = LAAuto.Entities.Models;
 using SERVICES_IMPL_APPOINTMENTS = LAAuto.Services.Impl.Appointments;
-using SERVICES_IMPL_CATEGORIES = LAAuto.Services.Impl.Categories;
 using SERVICES_IMPL_USERS = LAAuto.Services.Impl.Users;
 
 namespace LAAuto.Services.Impl.Services
@@ -15,16 +12,13 @@ namespace LAAuto.Services.Impl.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly ICategoryService _categoryService;
-        private readonly IRatingService _ratingService;
 
         public ServiceService(
             ApplicationDbContext context,
-            ICategoryService categoryService,
-            IRatingService ratingService)
+            ICategoryService categoryService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
-            _ratingService = ratingService ?? throw new ArgumentNullException(nameof(ratingService));
         }
 
         public async Task<List<Service>> ListServicesAsync(string? categoryFilter = null)
@@ -32,6 +26,7 @@ namespace LAAuto.Services.Impl.Services
             var entities = await _context.Services
                 .Include(x => x.User)
                 .Include(x => x.Appointments)
+                .Include(x => x.Ratings)
                 .ToListAsync();
 
             if (categoryFilter is not null)
@@ -47,10 +42,10 @@ namespace LAAuto.Services.Impl.Services
             {
                 var service = Conversion.ConvertService(entity);
 
-                service.AverageRating = await CalculateAverageServiceRatingAsync(service.Id);
                 service.User = SERVICES_IMPL_USERS.Conversion.ConvertUser(entity.User);
                 service.Appointments = entity.Appointments.Select(SERVICES_IMPL_APPOINTMENTS.Conversion.ConvertAppointment).ToList();
                 service.Categories = await _categoryService.ListCategoriesAsync(entity.Id);
+                service.AverageRating = CalculateAverageServiceRating(entity.Ratings);
 
                 services.Add(service);
             }
@@ -79,6 +74,7 @@ namespace LAAuto.Services.Impl.Services
             var entity = await _context.Services
                 .Include(x => x.User)
                 .Include(x => x.Appointments)
+                .Include(x => x.Ratings)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity is null)
@@ -88,11 +84,11 @@ namespace LAAuto.Services.Impl.Services
 
             var service = Conversion.ConvertService(entity);
 
-            //service.AverageRating = await CalculateAverageServiceRatingAsync(id);
-
             service.Categories = await _categoryService.ListCategoriesAsync(entity.Id);
             service.Appointments = entity.Appointments.Select(SERVICES_IMPL_APPOINTMENTS.Conversion.ConvertAppointment).ToList();
             service.User = SERVICES_IMPL_USERS.Conversion.ConvertUser(entity.User);
+            service.AverageRating = CalculateAverageServiceRating(entity.Ratings);
+
             return service;
         }
 
@@ -160,6 +156,26 @@ namespace LAAuto.Services.Impl.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateServiceRatingAsync(UpdateRatingRequest request)
+        {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var entities = await _context.Ratings
+                .Where(x => x.UserId == request.UserId && x.ServiceId == request.ServiceId)
+                .ToListAsync();
+
+            _context.Ratings.RemoveRange(entities);
+
+            var rating = Conversion.ConvertRating(request);
+
+            await _context.AddAsync(rating);
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteServiceAsync(Guid id)
         {
             var entity = await _context.Services
@@ -185,15 +201,8 @@ namespace LAAuto.Services.Impl.Services
             }
         }
 
-        private async Task<double> CalculateAverageServiceRatingAsync(Guid serviceId)
+        private static double CalculateAverageServiceRating(ICollection<ENTITIES.Rating> ratings)
         {
-            var filter = new Filter()
-            {
-                ServiceId = serviceId
-            };
-
-            var ratings = await _ratingService.ListRatingsAsync(filter);
-
             double average = ratings.Count > 0
                 ? ratings.Average(x => x.Value)
                 : 0;

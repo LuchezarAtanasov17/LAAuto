@@ -25,7 +25,7 @@ namespace LAAuto.Web.Models.Services
 
         public IFormFile? Image { get; set; }
 
-
+        public UpdateRatingRequest UpdateRatingRequest { get; set; }
 
         public UserViewModel User { get; set; }
 

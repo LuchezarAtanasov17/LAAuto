@@ -23,6 +23,12 @@ namespace LAAuto.Web.Models.Services
                 CloseTime = source.CloseTime,
                 Location = source.Location,
                 User = WEB_USERS.Conversion.ConvertUser(source.User),
+                UpdateRatingRequest = new UpdateRatingRequest
+                {
+                    ServiceId = source.Id,
+                    Value = (int)Math.Floor(source.AverageRating),
+                    AverageRating = Math.Round(source.AverageRating, 2),
+                },
                 //Image = source.Image != null && source.Image.Length > 0
                 //    ? ConvertImage(source.Image)
                 //    : null,
@@ -39,49 +45,66 @@ namespace LAAuto.Web.Models.Services
             return target;
         }
 
-    public static SERVICES_SERVICES.CreateServiceRequest ConvertService(CreateServiceRequest source)
-    {
-        if (source is null)
+        public static SERVICES_SERVICES.CreateServiceRequest ConvertService(CreateServiceRequest source)
         {
-            throw new ArgumentNullException(nameof(source));
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            var target = new SERVICES_SERVICES.CreateServiceRequest
+            {
+                UserId = source.UserId,
+                Name = source.Name,
+                Description = source.Description,
+                OpenTime = TimeOnly.Parse(source.OpenTime),
+                CloseTime = TimeOnly.Parse(source.CloseTime),
+                Location = source.Location,
+                //Image = source.Image != null
+                //    ? ConvertImage(source.Image)
+                //    : null
+            };
+
+            return target;
         }
 
-        var target = new SERVICES_SERVICES.CreateServiceRequest
+        public static SERVICES_SERVICES.UpdateServiceRequest ConvertService(UpdateServiceRequest source)
         {
-            UserId = source.UserId,
-            Name = source.Name,
-            Description = source.Description,
-            OpenTime = TimeOnly.Parse(source.OpenTime),
-            CloseTime = TimeOnly.Parse(source.CloseTime),
-            Location = source.Location,
-            //Image = source.Image != null
-            //    ? ConvertImage(source.Image)
-            //    : null
-        };
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
 
-        return target;
-    }
+            var target = new SERVICES_SERVICES.UpdateServiceRequest
+            {
+                Id = source.Id,
+                Name = source.Name,
+                Description = source.Description,
+                OpenTime = TimeOnly.Parse(source.OpenTime),
+                CloseTime = TimeOnly.Parse(source.CloseTime),
+                Location = source.Location,
+                //Image = source.Image
+            };
 
-    public static SERVICES_SERVICES.UpdateServiceRequest ConvertService(UpdateServiceRequest source)
-    {
-        if (source is null)
-        {
-            throw new ArgumentNullException(nameof(source));
+            return target;
         }
 
-        var target = new SERVICES_SERVICES.UpdateServiceRequest
+        public static SERVICES_SERVICES.UpdateRatingRequest ConvertUpdateRating(UpdateRatingRequest source)
         {
-            Id = source.Id,
-            Name = source.Name,
-            Description = source.Description,
-            OpenTime = TimeOnly.Parse(source.OpenTime),
-            CloseTime = TimeOnly.Parse(source.CloseTime),
-            Location = source.Location,
-            //Image = source.Image
-        };
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
 
-        return target;
-    }
+            var target = new SERVICES_SERVICES.UpdateRatingRequest
+            {
+                ServiceId = source.ServiceId,
+                UserId = source.UserId,
+                Value = source.Value,
+            };
+
+            return target;
+        }
 
         //private static IFormFile ConvertImage(byte[] bytes)
         //{
@@ -95,15 +118,15 @@ namespace LAAuto.Web.Models.Services
         //}
 
         private static byte[] ConvertImage(IFormFile image)
-    {
-        using (var ms = new MemoryStream())
         {
-            image.CopyTo(ms);
-            var fileBytes = ms.ToArray();
-            // act on the Base64 data
+            using (var ms = new MemoryStream())
+            {
+                image.CopyTo(ms);
+                var fileBytes = ms.ToArray();
+                // act on the Base64 data
 
-            return fileBytes;
+                return fileBytes;
+            }
         }
     }
-}
 }

@@ -48,5 +48,22 @@ namespace LAAuto.Services.Impl.Services
 
             return target;
         }
+
+        public static ENTITIES.Rating ConvertRating(UpdateRatingRequest source)
+        {
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            var target = new ENTITIES.Rating()
+            {
+                ServiceId = source.ServiceId,
+                UserId = source.UserId,
+                Value = source.Value,
+            };
+
+            return target;
+        }
     }
 }

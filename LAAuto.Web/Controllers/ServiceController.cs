@@ -170,7 +170,31 @@ namespace LAAuto.Web.Controllers
 
             await _serviceService.UpdateServiceAsync(id, serviceRequest);
 
-            return RedirectToAction(nameof(Get), new {Id = id});
+            return RedirectToAction(nameof(Get), new { Id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateRating(
+            UpdateRatingRequest request)
+        {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var serviceRequest = Conversion.ConvertUpdateRating(request);
+
+            await _serviceService.UpdateServiceRatingAsync(serviceRequest);
+
+            return RedirectToAction(nameof(Get), new { id = request.ServiceId });
         }
 
         public async Task<IActionResult> Delete(

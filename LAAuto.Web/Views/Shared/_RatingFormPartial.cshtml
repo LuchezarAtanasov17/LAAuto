@@ -1,0 +1,25 @@
+﻿@using LAAuto.Web.Models.Services
+
+@model UpdateRatingRequest
+
+<div class="col-md-4">
+    <div class="card mb-3">
+        <form enctype="multipart/form-data" method="post">
+            <div>
+                <label class="form-label">Avg. Rating: @Model.AverageRating</label>
+            </div>
+            <div>
+                <input class="btn btn-warning btn-sm" asp-controller="Service" asp-action="UpdateRating" type="submit" value="Rate" />
+                <select asp-for="@Model.Value">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <input type="hidden" asp-for="@Model.ServiceId" />
+            </div>
+        </form>
+    </div>
+</div>
