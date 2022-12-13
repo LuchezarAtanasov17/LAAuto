@@ -80,7 +80,7 @@ namespace LAAuto.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create2(
+        public async Task<IActionResult> Create(
             Guid id,
             CreateAppointmentRequest request)
         {
@@ -88,10 +88,27 @@ namespace LAAuto.Web.Controllers
             {
                 throw new ArgumentNullException(nameof(request));
             }
+            var service = await _serviceService.GetServiceAsync(id);
+
+            request.ServiceId = id;
+            request.Service = SERVICES_MODELS.Conversion.ConvertService(service);
 
             request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             request.StartDate = request.StartDate.AddHours(request.StartDateHour);
             request.EndDate = request.StartDate.AddHours(1);
+
+            var category = await _categoryService.GetCategoryAsync(request.CategoryId);
+            request.Category = CATEGORIES_MODELS.Conversion.ConvertCategory(category);
+
+            if (request.StartDate < DateTime.Now)
+            {
+                ModelState.AddModelError(nameof(request.StartDate), "Invalid date.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("Create", request);
+            }
 
             var appointmentRequest = Conversion.ConvertCreateAppointmentRequest(request);
             appointmentRequest.ServiceId = id;
@@ -130,10 +147,24 @@ namespace LAAuto.Web.Controllers
             }
 
             var serviceRequest = Conversion.ConvertUpdateAppointmentRequest(request);
-            serviceRequest.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
+
+            var service = await _serviceService.GetServiceAsync(request.ServiceId);
+            request.Service = SERVICES_MODELS.Conversion.ConvertService(service);
+
+            serviceRequest.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             serviceRequest.StartDate = request.StartDate.AddHours(request.StartDateHour);
             serviceRequest.EndDate = serviceRequest.StartDate.AddHours(1);
+
+            if (request.StartDate < DateTime.Now)
+            {
+                ModelState.AddModelError(nameof(request.StartDate), "Invalid date.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View("Update", request);
+            }
 
             await _appointmentService.UpdateAppointmentAsync(id, serviceRequest);
 

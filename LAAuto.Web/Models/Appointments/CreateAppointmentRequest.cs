@@ -20,8 +20,8 @@ namespace LAAuto.Web.Models.Appointments
 
         public string? Description { get; set; }
 
-        public ServiceViewModel Service { get; set; }
+        public ServiceViewModel? Service { get; set; }
 
-        public CategoryViewModel Category { get; set; }
+        public CategoryViewModel? Category { get; set; }
     }
 }

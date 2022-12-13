@@ -7,7 +7,7 @@ namespace LAAuto.Web.Models.Services
     {
         public Guid Id { get; set; }
 
-        public List<Guid> CategoryIds { get; set; }
+        public List<Guid>? CategoryIds { get; set; }
 
         [Required]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
@@ -22,7 +22,7 @@ namespace LAAuto.Web.Models.Services
         public string OpenTime { get; set; }
 
         public string CloseTime { get; set; }
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
 
         public List<SelectCategoryViewModel> Categories { get; set; }
     }

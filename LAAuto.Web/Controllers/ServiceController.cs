@@ -127,7 +127,7 @@ namespace LAAuto.Web.Controllers
 
             await _serviceService.CreateServiceAsync(serviceRequest);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Mine));
         }
 
         [HttpGet]
@@ -171,6 +171,10 @@ namespace LAAuto.Web.Controllers
             if (request.Categories.Where(x => x.IsSelected == true).ToList().Count < 1)
             {
                 ModelState.AddModelError(nameof(request.Categories), "You should select at least one category.");
+            }
+            if (request.OpenTime == request.CloseTime)
+            {
+                ModelState.AddModelError(nameof(request.CloseTime), "You should select correct open and close times.");
             }
             if (!ModelState.IsValid)
             {
@@ -219,7 +223,7 @@ namespace LAAuto.Web.Controllers
         {
             await _serviceService.DeleteServiceAsync(id);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Mine));
         }
     }
 }

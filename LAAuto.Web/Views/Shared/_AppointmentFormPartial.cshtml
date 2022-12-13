@@ -36,7 +36,7 @@
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" asp-controller="Appointment" asp-action="Create2" asp-route-id="@Model.ServiceId" type="submit" value="Save" />
+                <input class="btn btn-primary" asp-controller="Appointment" asp-action="Create" asp-route-id="@Model.ServiceId" type="submit" value="Save" />
                 <a class="btn btn-secondary" asp-controller="Appointment" asp-action="List">Cancel</a>
             </div>
         </form>
