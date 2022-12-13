@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,7 +29,7 @@
                                 <a class="nav-link text-white" asp-area="" asp-controller="Service" asp-action="Mine">My Services</a>
                             </li>
                             <li class="nav-item justify-content-left">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Appointment" asp-action="List">My appointments</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Appointment" asp-action="Mine">My appointments</a>
                             </li>
                             @if (this.User.IsInRole("Administrator"))
                             {

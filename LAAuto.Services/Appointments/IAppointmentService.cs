@@ -2,7 +2,7 @@
 {
     public interface IAppointmentService
     {
-        Task<List<Appointment>> ListAppointmentsAsync(Guid? serviceId = null);
+        Task<List<Appointment>> ListAppointmentsAsync(Guid? serviceId = null, Guid? userId = null);
 
         Task<Appointment> GetAppointmentAsync(Guid id);
 

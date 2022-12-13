@@ -29,7 +29,10 @@
                 Close at:
                 <b>@Model.CloseTime</b>
             </p>
-            <p>@Model.Description</p>
+            <p>
+                Description:
+                <b>@Model.Description</b>
+            </p>
             @if (Model.Categories.Count == 0)
             {
                     <p>No categories</p>
@@ -38,10 +41,7 @@
             {
                     <p>
                         Categories:
-                    @foreach (var category in Model.Categories)
-                    {
-                                <b>@category.Name</b>
-                    }
+                    <b>@String.Join(", ", Model.Categories.Select(x => x.Name))</b>
                     </p>
             }
             <div class="form-inline">
@@ -53,6 +53,8 @@
                    asp-route-id="@Model.Id">Edit</a>
                                 <a class="ml-2 btn btn-danger" asp-controller="Service" asp-action="Delete"
                    asp-route-id="@Model.Id">Delete</a>
+                                <a class="ml-2 btn btn-info" asp-controller="Appointment" asp-action="ListByService"
+                   asp-route-serviceId="@Model.Id">Appointments</a>
                     }
                     else
                     {

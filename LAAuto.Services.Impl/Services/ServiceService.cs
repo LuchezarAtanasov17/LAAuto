@@ -21,7 +21,7 @@ namespace LAAuto.Services.Impl.Services
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
         }
 
-        public async Task<List<Service>> ListServicesAsync(string? categoryFilter = null)
+        public async Task<List<Service>> ListServicesAsync(Guid? userId = null)
         {
             var entities = await _context.Services
                 .Include(x => x.User)
@@ -29,12 +29,9 @@ namespace LAAuto.Services.Impl.Services
                 .Include(x => x.Ratings)
                 .ToListAsync();
 
-            if (categoryFilter is not null)
+            if (userId != null)
             {
-                entities = entities
-                    .Where(x => x.CategoryServices.Select(x => x.Category)
-                        .Any(c => c.Name == categoryFilter))
-                    .ToList();
+                entities = entities.Where(x => x.UserId == userId).ToList();
             }
 
             var services = new List<Service>();
@@ -49,22 +46,6 @@ namespace LAAuto.Services.Impl.Services
 
                 services.Add(service);
             }
-
-            return services;
-        }
-
-        public async Task<List<Service>> ListMyServicesAsync(Guid userId)
-        {
-            var entities = await _context.Services
-                .Include(x => x.User)
-                .Include(x => x.CategoryServices)
-                .Include(x => x.Appointments)
-                .Where(x => x.UserId == userId)
-                .ToListAsync();
-
-            List<Service> services = entities
-                .Select(Conversion.ConvertService)
-                .ToList();
 
             return services;
         }

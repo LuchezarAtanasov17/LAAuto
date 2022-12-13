@@ -2,9 +2,7 @@
 {
     public interface IServiceService
     {
-        Task<List<Service>> ListServicesAsync(string? categoryFilter = null);
-
-        Task<List<Service>> ListMyServicesAsync(Guid userId);
+        Task<List<Service>> ListServicesAsync(Guid? userId = null);
 
         Task<Service> GetServiceAsync(Guid id);
 

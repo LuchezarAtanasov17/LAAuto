@@ -8,6 +8,7 @@ using System.Security.Claims;
 using SERVICES_MODELS = LAAuto.Web.Models.Services;
 using CATEGORIES_MODELS = LAAuto.Web.Models.Categories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace LAAuto.Web.Controllers
 {
@@ -27,20 +28,31 @@ namespace LAAuto.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous] // ?????????????????????
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> Mine()
         {
-            var serviceAppointments = await _appointmentService.ListAppointmentsAsync();
+            var serviceAppointments = await _appointmentService.ListAppointmentsAsync(userId: Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
             var appointments = serviceAppointments
                 .Select(Conversion.ConvertAppointment)
                 .ToList();
 
-            return View(appointments);
+            return View("List", appointments);
         }
 
         [HttpGet]
-        [AllowAnonymous] // ?????????????????????
+        public async Task<IActionResult> ListByService(
+            Guid serviceId)
+        {
+            var serviceAppointments = await _appointmentService.ListAppointmentsAsync(serviceId: serviceId);
+
+            var appointments = serviceAppointments
+                .Select(Conversion.ConvertAppointment)
+                .ToList();
+
+            return View("ListByService", appointments);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Get(
             Guid id)
         {
@@ -55,7 +67,7 @@ namespace LAAuto.Web.Controllers
         public async Task<IActionResult> Create(
             Guid id)
         {
-            var model = new CreateAppointmentRequest() 
+            var model = new CreateAppointmentRequest()
             {
                 ServiceId = id,
             };
@@ -82,11 +94,11 @@ namespace LAAuto.Web.Controllers
             request.EndDate = request.StartDate.AddHours(1);
 
             var appointmentRequest = Conversion.ConvertCreateAppointmentRequest(request);
-            appointmentRequest.ServiceId= id;
-            
+            appointmentRequest.ServiceId = id;
+
             await _appointmentService.CreateAppointmentAsync(appointmentRequest);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Mine));
         }
 
         [HttpGet]
@@ -125,7 +137,7 @@ namespace LAAuto.Web.Controllers
 
             await _appointmentService.UpdateAppointmentAsync(id, serviceRequest);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Mine));
         }
 
         public async Task<IActionResult> Delete(
@@ -134,7 +146,7 @@ namespace LAAuto.Web.Controllers
         {
             await _appointmentService.DeleteAppointmentAsync(id);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Mine));
         }
     }
 }

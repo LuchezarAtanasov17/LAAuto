@@ -36,6 +36,8 @@ namespace LAAuto.Web.Controllers
         {
             var serviceServices = await _serviceService.ListServicesAsync();
 
+            serviceServices = serviceServices.Where(x => x.UserId != Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))).ToList();
+
             var services = serviceServices
                 .Select(Conversion.ConvertService)
                 .ToList();
@@ -48,9 +50,11 @@ namespace LAAuto.Web.Controllers
         {
             Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var serviceServices = await _serviceService.ListMyServicesAsync(userId);
+            var serviceServices = await _serviceService.ListServicesAsync(userId);
 
-            var services = serviceServices.Select(Conversion.ConvertService).ToList();
+            var services = serviceServices
+                .Select(Conversion.ConvertService)
+                .ToList();
 
             //TODO:
             if (services.Count == 0)
@@ -58,7 +62,7 @@ namespace LAAuto.Web.Controllers
                 return RedirectToAction(nameof(List));
             }
 
-            return View(serviceServices);
+            return View("List", services);
         }
 
         [HttpGet]
@@ -69,7 +73,6 @@ namespace LAAuto.Web.Controllers
             var serviceService = await _serviceService.GetServiceAsync(id);
 
             var service = Conversion.ConvertService(serviceService);
-            //service.User = await _userService.GetUserAsync(service.UserId);
 
             return View("Details", service);
         }
@@ -99,6 +102,15 @@ namespace LAAuto.Web.Controllers
                 throw new ArgumentNullException(nameof(request));
             }
 
+            if (request.Categories.Where(x => x.IsSelected == true).ToList().Count < 1)
+            {
+                ModelState.AddModelError(nameof(request.Categories), "You should select at least one category.");
+            }
+            if (request.OpenTime == request.CloseTime)
+            {
+                ModelState.AddModelError(nameof(request.CloseTime), "You should select correct open and close times.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(request);
@@ -123,7 +135,6 @@ namespace LAAuto.Web.Controllers
         {
             var service = await _serviceService.GetServiceAsync(id);
             var categories = await _categoryService.ListCategoriesAsync();
-
 
             var model = new UpdateServiceRequest()
             {
@@ -152,19 +163,24 @@ namespace LAAuto.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(Guid id, UpdateServiceRequest request)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(request);
-            //}
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
+            if (request.Categories.Where(x => x.IsSelected == true).ToList().Count < 1)
+            {
+                ModelState.AddModelError(nameof(request.Categories), "You should select at least one category.");
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
             var serviceRequest = Conversion.ConvertService(request);
 
             serviceRequest.Categories = request.Categories
-                .Where(x=>x.IsSelected == true)
+                .Where(x => x.IsSelected == true)
                 .Select(CATEGORIES_MODELS.Conversion.ConvertSelectCategory)
                 .ToList();
 

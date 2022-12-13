@@ -15,7 +15,7 @@ namespace LAAuto.Services.Impl.Appointments
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<List<Appointment>> ListAppointmentsAsync(Guid? serviceId = null)
+        public async Task<List<Appointment>> ListAppointmentsAsync(Guid? serviceId = null, Guid? userId = null)
         {
             var entities = await _context.Appointments
                 .Include(x => x.User)
@@ -25,6 +25,10 @@ namespace LAAuto.Services.Impl.Appointments
             if (serviceId != null)
             {
                 entities = entities.Where(x => x.ServiceId == serviceId).ToList();
+            }
+            if (userId != null)
+            {
+                entities = entities.Where(x => x.UserId == userId).ToList();
             }
 
             var appointments = new List<Appointment>();
