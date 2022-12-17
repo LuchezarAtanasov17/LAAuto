@@ -4,8 +4,16 @@ using WEB_USERS = LAAuto.Web.Models.Users;
 
 namespace LAAuto.Web.Models.Appointments
 {
+    /// <summary>
+    /// Represents a conversion class for converting web models.
+    /// </summary>
     public class Conversion
     {
+        /// <summary>
+        /// Converts a service appointment to web appointment.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns>web model</returns>
         public static AppointmentViewModel ConvertAppointment(SERVICES_APPOINTMENTS.Appointment source)
         {
             if (source is null)
@@ -38,6 +46,11 @@ namespace LAAuto.Web.Models.Appointments
             return target;
         }
 
+        /// <summary>
+        /// Converts a web request to service request.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns>service request</returns>
         public static SERVICES_APPOINTMENTS.CreateAppointmentRequest ConvertCreateAppointmentRequest(CreateAppointmentRequest source)
         {
             if (source is null)
@@ -58,6 +71,11 @@ namespace LAAuto.Web.Models.Appointments
             return target;
         }
 
+        /// <summary>
+        /// Converts a web request to service request.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns>service request</returns>
         public static SERVICES_APPOINTMENTS.UpdateAppointmentRequest ConvertUpdateAppointmentRequest(UpdateAppointmentRequest source)
         {
             if (source is null)

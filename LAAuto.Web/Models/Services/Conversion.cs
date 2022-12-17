@@ -4,8 +4,16 @@ using WEB_USERS = LAAuto.Web.Models.Users;
 
 namespace LAAuto.Web.Models.Services
 {
+    /// <summary>
+    /// Represents a conversion class for converting web models.
+    /// </summary>
     public class Conversion
     {
+        /// <summary>
+        /// Converts a service service to web service.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns>web model</returns>
         public static ServiceViewModel ConvertService(SERVICES_SERVICES.Service source)
         {
             if (source is null)
@@ -29,22 +37,19 @@ namespace LAAuto.Web.Models.Services
                     Value = (int)Math.Floor(source.AverageRating),
                     AverageRating = Math.Round(source.AverageRating, 2),
                 },
-                //Image = source.Image != null && source.Image.Length > 0
-                //    ? ConvertImage(source.Image)
-                //    : null,
                 Categories = source.Categories
                     .Select(WEB_CATEGORY.Conversion.ConvertCategory)
                     .ToHashSet()
-                //Appointments = source.Appointments
-                //    .Select(WEB_APPOINTMENT.Conversion.ConvertAppointment)
-                //    .ToHashSet(),
-
-                //AverageRating = source.AverageRating,
             };
 
             return target;
         }
 
+        /// <summary>
+        /// Converts a web request to service request.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns>service model</returns>
         public static SERVICES_SERVICES.CreateServiceRequest ConvertService(CreateServiceRequest source)
         {
             if (source is null)
@@ -60,14 +65,16 @@ namespace LAAuto.Web.Models.Services
                 OpenTime = TimeOnly.Parse(source.OpenTime),
                 CloseTime = TimeOnly.Parse(source.CloseTime),
                 Location = source.Location,
-                //Image = source.Image != null
-                //    ? ConvertImage(source.Image)
-                //    : null
             };
 
             return target;
         }
 
+        /// <summary>
+        /// Converts a web request to service request.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns>service model</returns>
         public static SERVICES_SERVICES.UpdateServiceRequest ConvertService(UpdateServiceRequest source)
         {
             if (source is null)
@@ -83,12 +90,16 @@ namespace LAAuto.Web.Models.Services
                 OpenTime = TimeOnly.Parse(source.OpenTime),
                 CloseTime = TimeOnly.Parse(source.CloseTime),
                 Location = source.Location,
-                //Image = source.Image
             };
 
             return target;
         }
 
+        /// <summary>
+        /// Converts a web request to service request.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns>service model</returns>
         public static SERVICES_SERVICES.UpdateRatingRequest ConvertUpdateRating(UpdateRatingRequest source)
         {
             if (source is null)
@@ -104,29 +115,6 @@ namespace LAAuto.Web.Models.Services
             };
 
             return target;
-        }
-
-        //private static IFormFile ConvertImage(byte[] bytes)
-        //{
-        //    using (var ms = new MemoryStream(bytes))
-        //    {
-        //        file.CopyTo(ms);
-        //        // act on the Base64 data
-        //
-        //        return file;
-        //    }
-        //}
-
-        private static byte[] ConvertImage(IFormFile image)
-        {
-            using (var ms = new MemoryStream())
-            {
-                image.CopyTo(ms);
-                var fileBytes = ms.ToArray();
-                // act on the Base64 data
-
-                return fileBytes;
-            }
         }
     }
 }

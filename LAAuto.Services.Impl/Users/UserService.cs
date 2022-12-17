@@ -4,15 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LAAuto.Services.Impl.Users
 {
+    /// <summary>
+    /// Represents an service service.
+    /// </summary>
     public class UserService : IUserService
     {
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Initialize a new instance of the <see cref="UserService"/> class.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public UserService(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <inheritdoc/>
         public async Task<List<User>> ListUsersAsync()
         {
             var entities = await _context.Users
@@ -25,6 +34,7 @@ namespace LAAuto.Services.Impl.Users
             return users;
         }
 
+        /// <inheritdoc/>
         public async Task<User> GetUserAsync(Guid id)
         {
             var entity = await _context.Users
@@ -40,6 +50,7 @@ namespace LAAuto.Services.Impl.Users
             return user;
         }
 
+        /// <inheritdoc/>
         public async Task DeleteUserAsync(Guid id)
         {
             var entity = await _context.Users

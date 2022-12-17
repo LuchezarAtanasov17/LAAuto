@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LAAuto.Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221211230923_Initial")]
+    [Migration("20221217230336_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,7 +138,7 @@ namespace LAAuto.Entities.Migrations
                         new
                         {
                             CategoryId = new Guid("0c1237b8-2fe4-43f7-b6dc-2a0a4ef0713d"),
-                            ServiceId = new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"),
+                            ServiceId = new Guid("fce201d7-e941-4f41-b3be-0c265798ede9"),
                             Id = new Guid("6a62c3f8-aa54-4857-9599-fcbba31da47d")
                         });
                 });
@@ -232,9 +232,6 @@ namespace LAAuto.Entities.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
-
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("image");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -366,7 +363,7 @@ namespace LAAuto.Entities.Migrations
                         {
                             Id = new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2b93a93f-5009-4cf9-8e51-4959264b284c",
+                            ConcurrencyStamp = "2ca21132-91a9-4653-b74d-acc825c3cc1e",
                             Email = "client@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Pesho",

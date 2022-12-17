@@ -97,11 +97,6 @@
                     <br />
                 <span asp-validation-for="CloseTime" class="text-danger"></span>
             </div>
-            <div id="upload-image" class="form-floating">
-                <label asp-for="Image"></label>
-            <input id="upload" asp-for="Image" multiple accept="image/*">
-            <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
             <div class="mb-3">
                 <input class="btn btn-primary" asp-controller="Service" asp-action="Create" type="submit" value="Save" />
             </div>

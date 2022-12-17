@@ -8,11 +8,20 @@ using SERVICES_IMPL_USERS = LAAuto.Services.Impl.Users;
 
 namespace LAAuto.Services.Impl.Services
 {
+    /// <summary>
+    /// Represents an service service.
+    /// </summary>
     public class ServiceService : IServiceService
     {
         private readonly ApplicationDbContext _context;
         private readonly ICategoryService _categoryService;
 
+        /// <summary>
+        /// Initialize a new instance of the <see cref="ServiceService"/> class.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="categoryService"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public ServiceService(
             ApplicationDbContext context,
             ICategoryService categoryService)
@@ -21,6 +30,7 @@ namespace LAAuto.Services.Impl.Services
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
         }
 
+        /// <inheritdoc/>
         public async Task<List<Service>> ListServicesAsync(Guid? userId = null)
         {
             var entities = await _context.Services
@@ -50,6 +60,7 @@ namespace LAAuto.Services.Impl.Services
             return services;
         }
 
+        /// <inheritdoc/>
         public async Task<Service> GetServiceAsync(Guid id)
         {
             var entity = await _context.Services
@@ -73,6 +84,7 @@ namespace LAAuto.Services.Impl.Services
             return service;
         }
 
+        /// <inheritdoc/>
         public async Task CreateServiceAsync(CreateServiceRequest request)
         {
             if (request is null)
@@ -99,6 +111,7 @@ namespace LAAuto.Services.Impl.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task UpdateServiceAsync(Guid id, UpdateServiceRequest request)
         {
             if (request is null)
@@ -137,6 +150,7 @@ namespace LAAuto.Services.Impl.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task UpdateServiceRatingAsync(UpdateRatingRequest request)
         {
             if (request is null)
@@ -157,6 +171,7 @@ namespace LAAuto.Services.Impl.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task DeleteServiceAsync(Guid id)
         {
             var entity = await _context.Services
@@ -171,6 +186,11 @@ namespace LAAuto.Services.Impl.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Calculates average service rating
+        /// </summary>
+        /// <param name="ratings"></param>
+        /// <returns></returns>
         private static double CalculateAverageServiceRating(ICollection<ENTITIES.Rating> ratings)
         {
             double average = ratings.Count > 0

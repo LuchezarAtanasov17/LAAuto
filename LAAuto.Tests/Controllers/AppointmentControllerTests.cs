@@ -112,55 +112,6 @@ namespace LAAuto.Tests.Controllers
         }
 
         [Fact]
-        public async Task GetAppointment_ReturnsViewWithAppointment()
-        {
-            #region Arrange
-
-            var serviceAppointment = new SERVICE_APPOINTMENTS.Appointment
-            {
-                Id = Guid.NewGuid(),
-                CategoryId = Guid.NewGuid(),
-                Description = "Test2",
-                EndDate = DateTime.Now,
-                StartDate = DateTime.Now,
-                ServiceId = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
-                User = new User(),
-                Service = new Service(),
-            };
-
-            appointmentServiceMock.Setup(x => x.GetAppointmentAsync(
-                    It.IsAny<Guid>()))
-                .Returns(Task.FromResult(serviceAppointment));
-
-            #endregion
-
-            #region Act
-
-            var controller = new AppointmentController
-                (appointmentServiceMock.Object, serviceServiceMock.Object, categoryServiceMock.Object);
-
-            var result = await controller.Get(serviceAppointment.Id);
-
-            #endregion
-
-            #region Assert
-
-            Assert.NotNull(result);
-
-            var expected = result as ViewResult;
-
-            Assert.NotNull(expected);
-
-            Assert.IsType<AppointmentViewModel>(expected.Model);
-
-            var controllerAppointment = expected.Model as AppointmentViewModel;
-
-            Assert.Equal(controllerAppointment.Id, serviceAppointment.Id);
-            #endregion
-        }
-
-        [Fact]
         public async Task GetCreateAppointment_ReturnViewWithAppointment()
         {
             #region Arrange

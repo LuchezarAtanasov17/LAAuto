@@ -1,12 +1,18 @@
 ﻿using LAAuto.Services.Users;
 using ENTITIES = LAAuto.Entities.Models;
-using SERVICES_IMPL_SERVICES = LAAuto.Services.Impl.Services;
-using SERVICES_IMPL_APPOINTMENTS = LAAuto.Services.Impl.Appointments;
 
 namespace LAAuto.Services.Impl.Users
 {
+    /// <summary>
+    /// Represents a conversion class for converting service models.
+    /// </summary>
     public static class Conversion
     {
+        /// <summary>
+        /// Converts an entity user to service user.
+        /// </summary>
+        /// <param name="source">the source</param>
+        /// <returns>service user</returns>
         public static User ConvertUser(ENTITIES.User source)
         {
             if (source is null)
@@ -25,6 +31,12 @@ namespace LAAuto.Services.Impl.Users
 
             return target;
         }
+
+        /// <summary>
+        /// Converts the service user to entity model.
+        /// </summary>
+        /// <param name="source">the source</param>
+        /// <returns>entity model</returns>
         public static ENTITIES.User ConvertUser(User source)
         {
             if (source is null)

@@ -2,8 +2,16 @@
 
 namespace LAAuto.Web.Models.Users
 {
+    /// <summary>
+    /// Represents a conversion class for converting web models.
+    /// </summary>
     public class Conversion
     {
+        /// <summary>
+        /// Convert service user to web user
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns>web model</returns>
         public static UserViewModel ConvertUser(SERVICES_USERS.User source)
         {
             if (source is null)

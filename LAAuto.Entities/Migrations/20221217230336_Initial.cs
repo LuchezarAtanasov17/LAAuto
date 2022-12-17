@@ -178,8 +178,7 @@ namespace LAAuto.Entities.Migrations
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Location = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
                     OpenTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Image = table.Column<byte[]>(type: "image", nullable: true)
+                    CloseTime = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -287,7 +286,7 @@ namespace LAAuto.Entities.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"), 0, "2b93a93f-5009-4cf9-8e51-4959264b284c", "client@mail.com", false, "Pesho", "Peshov", false, null, "CLIENT@MAIL.COM", "CLIENT", null, null, false, null, false, "User" });
+                values: new object[] { new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2"), 0, "2ca21132-91a9-4653-b74d-acc825c3cc1e", "client@mail.com", false, "Pesho", "Peshov", false, null, "CLIENT@MAIL.COM", "CLIENT", null, null, false, null, false, "User" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -301,18 +300,18 @@ namespace LAAuto.Entities.Migrations
 
             migrationBuilder.InsertData(
                 table: "Services",
-                columns: new[] { "Id", "CloseTime", "Description", "Image", "Location", "Name", "OpenTime", "UserId" },
-                values: new object[] { new Guid("9226a3f4-35aa-4817-adcd-1c033cf739ad"), new TimeSpan(0, 18, 0, 0, 0), null, null, "Гр.Пловдив, кв.Кичука, ул.Македония 12", "Autox", new TimeSpan(0, 8, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
+                columns: new[] { "Id", "CloseTime", "Description", "Location", "Name", "OpenTime", "UserId" },
+                values: new object[] { new Guid("9226a3f4-35aa-4817-adcd-1c033cf739ad"), new TimeSpan(0, 18, 0, 0, 0), null, "Гр.Пловдив, кв.Кичука, ул.Македония 12", "Autox", new TimeSpan(0, 8, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
 
             migrationBuilder.InsertData(
                 table: "Services",
-                columns: new[] { "Id", "CloseTime", "Description", "Image", "Location", "Name", "OpenTime", "UserId" },
-                values: new object[] { new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new TimeSpan(0, 18, 0, 0, 0), null, null, "Гр.София, кв.Надежда, ул.Стамболийски 36", "Carx", new TimeSpan(0, 9, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
+                columns: new[] { "Id", "CloseTime", "Description", "Location", "Name", "OpenTime", "UserId" },
+                values: new object[] { new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new TimeSpan(0, 18, 0, 0, 0), null, "Гр.София, кв.Надежда, ул.Стамболийски 36", "Carx", new TimeSpan(0, 9, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
 
             migrationBuilder.InsertData(
                 table: "Services",
-                columns: new[] { "Id", "CloseTime", "Description", "Image", "Location", "Name", "OpenTime", "UserId" },
-                values: new object[] { new Guid("fce201d7-e941-4f41-b3be-0c265798ede9"), new TimeSpan(0, 20, 0, 0, 0), null, null, "Гр.Varna, кв.Владиславово, ул.Георги Минков 3", "CarKing", new TimeSpan(0, 10, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
+                columns: new[] { "Id", "CloseTime", "Description", "Location", "Name", "OpenTime", "UserId" },
+                values: new object[] { new Guid("fce201d7-e941-4f41-b3be-0c265798ede9"), new TimeSpan(0, 20, 0, 0, 0), null, "Гр.Varna, кв.Владиславово, ул.Георги Минков 3", "CarKing", new TimeSpan(0, 10, 0, 0, 0), new Guid("62448744-4356-44dc-a005-0bfb6ba9e8b2") });
 
             migrationBuilder.InsertData(
                 table: "Appointments",
@@ -324,7 +323,7 @@ namespace LAAuto.Entities.Migrations
                 columns: new[] { "CategoryId", "ServiceId", "Id" },
                 values: new object[,]
                 {
-                    { new Guid("0c1237b8-2fe4-43f7-b6dc-2a0a4ef0713d"), new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new Guid("6a62c3f8-aa54-4857-9599-fcbba31da47d") },
+                    { new Guid("0c1237b8-2fe4-43f7-b6dc-2a0a4ef0713d"), new Guid("fce201d7-e941-4f41-b3be-0c265798ede9"), new Guid("6a62c3f8-aa54-4857-9599-fcbba31da47d") },
                     { new Guid("7294f257-a657-4797-8fce-272319ade2f9"), new Guid("9226a3f4-35aa-4817-adcd-1c033cf739ad"), new Guid("accfbc90-1486-44b8-9a97-caeecf550391") },
                     { new Guid("7294f257-a657-4797-8fce-272319ade2f9"), new Guid("e17b327f-eee6-4011-9905-bc8360cd5e66"), new Guid("8317f4c5-3f8b-4020-bbcf-2adb5e30639b") }
                 });

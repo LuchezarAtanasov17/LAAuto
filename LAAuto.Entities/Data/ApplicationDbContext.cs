@@ -1,18 +1,25 @@
 ﻿using LAAuto.Entities.Data.Configuration;
 using LAAuto.Entities.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace LAAuto.Entities.Data
 {
+    /// <summary>
+    /// Represents the database context.
+    /// </summary>
     public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
+        /// </summary>
+        /// <param name="options">the options</param>
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
+        /// <inheritdoc/>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var timeOnlyToTimeSpanConverter = new TimeOnlyToTimeSpanConverter();
@@ -61,9 +68,6 @@ namespace LAAuto.Entities.Data
                 builder.Property(x => x.CloseTime)
                     .HasConversion(timeOnlyToTimeSpanConverter);
 
-                builder.Property(x => x.Image)
-                    .HasColumnType("image");
-
                 builder.HasOne(x => x.User)
                     .WithMany(x => x.Services)
                     .HasForeignKey(x => x.UserId)
@@ -93,19 +97,33 @@ namespace LAAuto.Entities.Data
             modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new RatingConfiguration());
             modelBuilder.ApplyConfiguration(new IdentityRoleConfiguration());
-            //modelBuilder.ApplyConfiguration(new IdentityUserRoleConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
 
+        /// <summary>
+        /// Gets or sets the appointments.
+        /// </summary>
         public DbSet<Appointment> Appointments { get; set; }
 
+        /// <summary>
+        /// Gets or sets the categories.
+        /// </summary>
         public DbSet<Category> Categories { get; set; }
 
+        /// <summary>
+        /// Gets or sets the ratings.
+        /// </summary>
         public DbSet<Rating> Ratings { get; set; }
 
+        /// <summary>
+        /// Gets or sets the services.
+        /// </summary>
         public DbSet<Service> Services { get; set; }
 
+        /// <summary>
+        /// Gets or sets the category services.
+        /// </summary>
         public DbSet<CategoryService> CategoryServices { get; set; }
     }
 }

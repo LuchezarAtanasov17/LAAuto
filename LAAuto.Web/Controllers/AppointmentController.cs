@@ -10,6 +10,9 @@ using SERVICES_MODELS = LAAuto.Web.Models.Services;
 
 namespace LAAuto.Web.Controllers
 {
+    /// <summary>
+    /// Represents appointment controller.
+    /// </summary>
     [Authorize]
     public class AppointmentController : Controller
     {
@@ -17,9 +20,16 @@ namespace LAAuto.Web.Controllers
         private readonly SERVICES.IServiceService _serviceService;
         private readonly CATEGORIES.ICategoryService _categoryService;
 
+        /// <summary>
+        /// Initialize new instance of <see cref="AppointmentController"/> class.
+        /// </summary>
+        /// <param name="appointmentService"></param>
+        /// <param name="serviceService"></param>
+        /// <param name="categoryService"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public AppointmentController(
-            APPOINTMENTS.IAppointmentService appointmentService, 
-            SERVICES.IServiceService serviceService, 
+            APPOINTMENTS.IAppointmentService appointmentService,
+            SERVICES.IServiceService serviceService,
             CATEGORIES.ICategoryService categoryService)
         {
             _appointmentService = appointmentService ?? throw new ArgumentNullException(nameof(appointmentService));
@@ -28,6 +38,12 @@ namespace LAAuto.Web.Controllers
 
         }
 
+        /// <summary>
+        /// Lists the appointments
+        /// </summary>
+        /// <param name="serviceId">service ID</param>
+        /// <param name="userId">user ID</param>
+        /// <returns>list view relative to parameters</returns>
         [HttpGet]
         public async Task<IActionResult> List(
             Guid? serviceId = null,
@@ -51,17 +67,11 @@ namespace LAAuto.Web.Controllers
             return View("ListByService", appointments);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(
-            Guid id)
-        {
-            var serviceAppointment = await _appointmentService.GetAppointmentAsync(id);
-
-            var appointment = Conversion.ConvertAppointment(serviceAppointment);
-
-            return View(appointment);
-        }
-
+        /// <summary>
+        /// Creates a create appointment request
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>the create view</returns>
         [HttpGet]
         public async Task<IActionResult> Create(
             Guid id)
@@ -78,6 +88,12 @@ namespace LAAuto.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Creates an appointment
+        /// </summary>
+        /// <param name="serviceId">service ID</param>
+        /// <param name="request">create request</param>
+        /// <returns>the list view</returns>
         [HttpPost]
         public async Task<IActionResult> Create(
             Guid serviceId,
@@ -117,6 +133,11 @@ namespace LAAuto.Web.Controllers
             return RedirectToAction(nameof(List), new { userId = appointmentRequest.UserId });
         }
 
+        /// <summary>
+        /// Create an update appointment request
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>the update view</returns>
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -137,6 +158,13 @@ namespace LAAuto.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Updates an appointment with specified ID.
+        /// </summary>
+        /// <param name="id">appointment ID</param>
+        /// <param name="request">update request</param>
+        /// <returns>the list view</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         [HttpPost]
         public async Task<IActionResult> Update(Guid id, UpdateAppointmentRequest request)
         {
@@ -170,15 +198,25 @@ namespace LAAuto.Web.Controllers
             return RedirectToAction(nameof(List), new { userId = serviceRequest.UserId });
         }
 
+        /// <summary>
+        /// Deletes an appointment with specified ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>redirects to list action</returns>
         public async Task<IActionResult> Delete(
             [FromRoute]
             Guid id)
         {
             await _appointmentService.DeleteAppointmentAsync(id);
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new {serviceId = id});
         }
 
+        /// <summary>
+        /// Deletes an appointment with specified user ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>redirects to list action with user ID parameter</returns>
         public async Task<IActionResult> DeleteMyAppointment(
            [FromRoute]
             Guid id)
@@ -186,7 +224,7 @@ namespace LAAuto.Web.Controllers
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             await _appointmentService.DeleteAppointmentAsync(id);
 
-            return RedirectToAction(nameof(List), new {userId = userId});
+            return RedirectToAction(nameof(List), new { userId = userId });
         }
     }
 }

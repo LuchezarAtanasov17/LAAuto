@@ -31,7 +31,7 @@ namespace LAAuto.Entities.Data.Configuration
                 {
                     Id = Guid.Parse("6a62c3f8-aa54-4857-9599-fcbba31da47d"),
                     CategoryId = Guid.Parse("0c1237b8-2fe4-43f7-b6dc-2a0a4ef0713d"),
-                    ServiceId = Guid.Parse("e17b327f-eee6-4011-9905-bc8360cd5e66")
+                    ServiceId = Guid.Parse("fce201d7-e941-4f41-b3be-0c265798ede9")
                 },
             };
 

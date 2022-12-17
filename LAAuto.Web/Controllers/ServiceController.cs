@@ -10,6 +10,9 @@ using SERVICES = LAAuto.Services.Services;
 
 namespace LAAuto.Web.Controllers
 {
+    /// <summary>
+    /// Represents service controller.
+    /// </summary>
     [Authorize]
     public class ServiceController : Controller
     {
@@ -18,7 +21,14 @@ namespace LAAuto.Web.Controllers
         private readonly SERVICE_CATEGORIES.ICategoryService _categoryService;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-
+        /// <summary>
+        /// Initialize new instance of <see cref="ServiceController"/> class.
+        /// </summary>
+        /// <param name="serviceService"></param>
+        /// <param name="userService"></param>
+        /// <param name="categoryService"></param>
+        /// <param name="hostEnvironment"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public ServiceController(
             SERVICES.IServiceService serviceService,
             SERVICE_USERS.IUserService userService,
@@ -31,6 +41,10 @@ namespace LAAuto.Web.Controllers
             _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
 
+        /// <summary>
+        /// Lists the services
+        /// </summary>
+        /// <returns>the list view</returns>
         [HttpGet]
         public async Task<IActionResult> List()
         {
@@ -45,6 +59,10 @@ namespace LAAuto.Web.Controllers
             return View(services);
         }
 
+        /// <summary>
+        /// Lists services with specified user ID
+        /// </summary>
+        /// <returns>the list view</returns>
         [HttpGet]
         public async Task<IActionResult> Mine()
         {
@@ -59,6 +77,11 @@ namespace LAAuto.Web.Controllers
             return View("List", services);
         }
 
+        /// <summary>
+        /// Gets a service with specified ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>the details view</returns>
         [HttpGet]
         public async Task<IActionResult> Get(
             [FromRoute]
@@ -71,6 +94,10 @@ namespace LAAuto.Web.Controllers
             return View("Details", service);
         }
 
+        /// <summary>
+        /// Creates a create service request
+        /// </summary>
+        /// <returns>the create view</returns>
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -86,6 +113,11 @@ namespace LAAuto.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Creates a service
+        /// </summary>
+        /// <param name="request">create service request</param>
+        /// <returns>redirects to mine action</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
@@ -124,6 +156,11 @@ namespace LAAuto.Web.Controllers
             return RedirectToAction(nameof(Mine));
         }
 
+        /// <summary>
+        /// Create an update service request
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>the update view</returns>
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
@@ -154,6 +191,12 @@ namespace LAAuto.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Updates an service with specified ID
+        /// </summary>
+        /// <param name="id">service ID</param>
+        /// <param name="request">update service request</param>
+        /// <returns>redirects to get action</returns>
         [HttpPost]
         public async Task<IActionResult> Update(Guid id, UpdateServiceRequest request)
         {
@@ -187,6 +230,12 @@ namespace LAAuto.Web.Controllers
             return RedirectToAction(nameof(Get), new { Id = id });
         }
 
+        /// <summary>
+        /// Updates a rating 
+        /// </summary>
+        /// <param name="request">update rating request</param>
+        /// <returns>redirects to get action</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateRating(
@@ -211,6 +260,11 @@ namespace LAAuto.Web.Controllers
             return RedirectToAction(nameof(Get), new { id = request.ServiceId });
         }
 
+        /// <summary>
+        /// Deletes a service with specified ID.
+        /// </summary>
+        /// <param name="id">service ID</param>
+        /// <returns>redirects to mine action</returns>
         public async Task<IActionResult> Delete(
             [FromRoute]
             Guid id)

@@ -6,15 +6,24 @@ using SERVICES_IMPL_SERVICES = LAAuto.Services.Impl.Services;
 
 namespace LAAuto.Services.Impl.Appointments
 {
+    /// <summary>
+    /// Represents an appointment service.
+    /// </summary>
     public class AppointmentService : IAppointmentService
     {
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Initialize a new instance of the <see cref="AppointmentService"/> class.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public AppointmentService(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <inheritdoc/>
         public async Task<List<Appointment>> ListAppointmentsAsync(Guid? serviceId = null, Guid? userId = null)
         {
             var entities = await _context.Appointments
@@ -43,8 +52,9 @@ namespace LAAuto.Services.Impl.Appointments
             }
 
             return appointments;
-        }   
+        }
 
+        /// <inheritdoc/>
         public async Task<Appointment> GetAppointmentAsync(Guid id)
         {
             var entity = await _context.Appointments
@@ -65,6 +75,7 @@ namespace LAAuto.Services.Impl.Appointments
             return appointment;
         }
 
+        /// <inheritdoc/>
         public async Task CreateAppointmentAsync(CreateAppointmentRequest request)
         {
             if (request is null)
@@ -78,6 +89,7 @@ namespace LAAuto.Services.Impl.Appointments
             await _context.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task UpdateAppointmentAsync(Guid id, UpdateAppointmentRequest request)
         {
             if (request is null)
@@ -102,6 +114,7 @@ namespace LAAuto.Services.Impl.Appointments
             await _context.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task DeleteAppointmentAsync(Guid id)
         {
             var entity = await _context.Appointments

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LAAuto.Web.Controllers
 {
+    /// <summary>
+    /// Represents home controller.
+    /// </summary>
     [AllowAnonymous]
     public class HomeController : Controller
     {
