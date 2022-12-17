@@ -2,7 +2,6 @@
 using LAAuto.Services.Appointments;
 using LAAuto.Services.Impl.Appointments;
 using LAAuto.Tests.Mocks;
-using Microsoft.EntityFrameworkCore;
 using ENTITIES = LAAuto.Entities.Models;
 
 namespace LAAuto.Tests.Services
@@ -381,30 +380,40 @@ namespace LAAuto.Tests.Services
             #endregion
         }
 
-        //[Fact]
-        //public async Task CreateAppointment_ThrowsIfCreateAppointmentRequestIsFulfilledIncorrectly()
-        //{
-        //    #region Arrange
+        [Fact]
+        public async Task CreateAppointment_DoesNotThrowIfCreateAppointmentRequestIsFulfilledCorrectly()
+        {
+            #region Arrange
 
-        //    using var data = DatabaseMock.Instance;
+            using var data = DatabaseMock.Instance;
 
-        //    var appointmentService = new AppointmentService(data);
+            var appointmentService = new AppointmentService(data);
 
-        //    var request = new CreateAppointmentRequest
-        //    {
-        //        StartDate = null
-        //    };
+            var request = new CreateAppointmentRequest
+            {
+                CategoryId = Guid.NewGuid(),
+                ServiceId= Guid.NewGuid(),  
+                UserId = Guid.NewGuid(),
+                StartDate= DateTime.Now,
+                EndDate= DateTime.Now,
+                Description = "DescriptionTestDescriptionTestDescriptionTest"
+            };
 
 
-        //    #endregion
+            #endregion
 
-        //    #region Act
+            #region Act
 
-        //    DbUpdateException ex = await Assert.ThrowsAsync<DbUpdateException>(async ()
-        //       => await appointmentService.CreateAppointmentAsync(request));
+            var exception = await Record.ExceptionAsync(async () => await appointmentService.CreateAppointmentAsync(request));
 
-        //    #endregion
-        //}
+            #endregion
+
+            #region Assert
+
+            Assert.Null(exception);
+
+            #endregion
+        }
 
         [Fact]
         public async Task UpdateAppointment_ThrowsIfUpdateAppointmentRequestIsNull()
@@ -460,7 +469,64 @@ namespace LAAuto.Tests.Services
             Assert.Equal(ex.Message, $"Could not find appointment with ID {id}.");
 
             #endregion
-        }   
+        }
+
+        [Fact]
+        public async Task UpdateAppointment_DoesNotThrowIfUpdateAppointmentRequestIsFulfilledCcorrectly()
+        {
+            #region Arrange
+
+            using var data = DatabaseMock.Instance;
+
+            var appointmentService = new AppointmentService(data);
+            var id = Guid.NewGuid();
+
+
+            data.Appointments.Add(new ENTITIES.Appointment()
+            {
+                Id = id,
+                CategoryId = Guid.NewGuid(),
+                ServiceId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                Description = "DescriptionTestDescriptionTestDescriptionTest",
+                Category = new ENTITIES.Category() { Name = "TestName"},
+                Service= new ENTITIES.Service()
+                {
+                    Name = "Name",
+                    Location = "LocationTest"
+                },
+                User = new ENTITIES.User()
+            });
+
+            data.SaveChanges();
+
+            var request = new UpdateAppointmentRequest
+            {
+                CategoryId = Guid.NewGuid(),
+                ServiceId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                Description = "DescriptionTestDescriptionTestDescriptionTest"
+            };
+
+
+            #endregion
+
+            #region Act
+
+            var exception = await Record.ExceptionAsync(async () => await appointmentService.UpdateAppointmentAsync(id, request));
+
+            #endregion
+
+            #region Assert
+
+            Assert.Null(exception);
+
+            #endregion
+        }
 
         [Fact]
         public async Task DeleteAppointment_ThrowsIfThereIsNoAppointmentWithThatId()
@@ -484,6 +550,53 @@ namespace LAAuto.Tests.Services
             #region Assert
 
             Assert.Equal(ex.Message, $"Could not find an appointment with ID {id}.");
+
+            #endregion
+        }
+
+        [Fact]
+        public async Task DeleteAppointment_DoesNotThrowIfThereIsAppointmentWithGivenId()
+        {
+            #region Arrange
+
+            using var data = DatabaseMock.Instance;
+
+            var appointmentService = new AppointmentService(data);
+
+            var id = Guid.NewGuid();
+
+            data.Appointments.Add(new ENTITIES.Appointment()
+            {
+                Id = id,
+                CategoryId = Guid.NewGuid(),
+                ServiceId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                Description = "DescriptionTestDescriptionTestDescriptionTest",
+                Category = new ENTITIES.Category() { Name = "TestName" },
+                Service = new ENTITIES.Service()
+                {
+                    Name = "Name",
+                    Location = "LocationTest"
+                },
+                User = new ENTITIES.User()
+            });
+
+            data.SaveChanges();
+
+
+            #endregion
+
+            #region Act
+
+            var exception = await Record.ExceptionAsync(async () => await appointmentService.DeleteAppointmentAsync(id));
+
+            #endregion
+
+            #region Assert
+
+            Assert.Null(exception);
 
             #endregion
         }

@@ -480,10 +480,7 @@ namespace LAAuto.Tests.Controllers
         {
             #region Arrange
 
-            var request = new UpdateRatingRequest()
-            {
-                
-            };
+            var request = new UpdateRatingRequest();
 
             #endregion
 

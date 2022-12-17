@@ -171,17 +171,6 @@ namespace LAAuto.Services.Impl.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task CancelAppointmentAsync(Guid id)
-        {
-            var service = await _context.Services
-                .FirstOrDefaultAsync(x => x.Id == id);
-
-            if (service is null)
-            {
-                throw new ObjectNotFoundException($"Could not find service with ID {id}");
-            }
-        }
-
         private static double CalculateAverageServiceRating(ICollection<ENTITIES.Rating> ratings)
         {
             double average = ratings.Count > 0

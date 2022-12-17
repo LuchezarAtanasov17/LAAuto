@@ -2,7 +2,7 @@
 using LAAuto.Services.Categories;
 using LAAuto.Services.Impl.Categories;
 using LAAuto.Tests.Mocks;
-    using ENTITIES = LAAuto.Entities.Models;
+using ENTITIES = LAAuto.Entities.Models;
 
 
 namespace LAAuto.Tests.Services
@@ -182,6 +182,36 @@ namespace LAAuto.Tests.Services
         }
 
         [Fact]
+        public async Task CreateCategory_WorksCorrectlyIfCreateCategoryRequestIsFulfilledCorrectly()
+        {
+            #region Arrange
+
+            using var data = DatabaseMock.Instance;
+
+            var categoryService = new CategoryService(data);
+
+            var request = new CreateCategoryRequest
+            {
+                Name = "TestName",
+            };
+
+
+            #endregion
+
+            #region Act
+
+            var exception = await Record.ExceptionAsync(async () => await categoryService.CreateCategoryAsync(request));
+
+            #endregion
+
+            #region Assert
+
+            Assert.Null(exception);
+
+            #endregion
+        }
+
+        [Fact]
         public async Task DeleteAppointment_ThrowsIfThereIsNoCategoryWithThatId()
         {
             #region Arrange
@@ -200,6 +230,37 @@ namespace LAAuto.Tests.Services
                => await categoryService.DeleteCategoryAsync(id));
 
             Assert.Equal(ex.Message, $"Could not find category with ID {id}");
+
+            #endregion
+        }
+
+        [Fact]
+        public async Task DeleteCategory_WorksCorrectlyIfThereIsCategoryWithGivenId()
+        {
+            #region Arrange
+
+            using var data = DatabaseMock.Instance;
+
+            var categoryService = new CategoryService(data);
+
+            var id = Guid.NewGuid();
+
+            data.Categories.Add(new ENTITIES.Category { Id = id , Name = "TestName"});
+
+            data.SaveChanges();
+            
+
+            #endregion
+
+            #region Act
+
+            var exception = await Record.ExceptionAsync(async () => await categoryService.DeleteCategoryAsync(id));
+
+            #endregion
+
+            #region Assert
+
+            Assert.Null(exception);
 
             #endregion
         }

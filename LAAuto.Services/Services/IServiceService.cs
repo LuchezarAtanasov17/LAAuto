@@ -13,7 +13,5 @@
         Task UpdateServiceRatingAsync(UpdateRatingRequest request);
 
         Task DeleteServiceAsync(Guid id);
-
-        Task CancelAppointmentAsync(Guid id);
     }
 }
