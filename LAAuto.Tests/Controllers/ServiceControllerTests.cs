@@ -1,22 +1,31 @@
-﻿using LAAuto.Services.Categories;
+﻿using LAAuto.Services;
+using LAAuto.Services.Categories;
+using LAAuto.Services.Impl.Appointments;
 using LAAuto.Services.Users;
 using LAAuto.Web.Controllers;
 using LAAuto.Web.Models.Categories;
 using LAAuto.Web.Models.Services;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
 using Moq;
+using System.Security.Claims;
 using SERVICES = LAAuto.Services.Services;
 
 namespace LAAuto.Tests.Controllers
 {
     public class ServiceControllerTests
     {
+        private readonly Claim nameIdentifier = new(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString());
         private readonly MockRepository _mockRepository;
         private readonly Mock<IWebHostEnvironment> hostEnvironmentMock;
         private readonly Mock<SERVICES.IServiceService> serviceServiceMock;
         private readonly Mock<ICategoryService> categoryServiceMock;
         private readonly Mock<IUserService> userServiceMock;
+        private readonly Mock<HttpContext> httpContextMock;
+
 
         public ServiceControllerTests()
         {
@@ -25,6 +34,9 @@ namespace LAAuto.Tests.Controllers
             serviceServiceMock = _mockRepository.Create<SERVICES.IServiceService>();
             categoryServiceMock = _mockRepository.Create<ICategoryService>();
             userServiceMock = _mockRepository.Create<IUserService>();
+
+            httpContextMock = new Mock<HttpContext>();
+            httpContextMock.Setup(m => m.User.FindFirst(ClaimTypes.NameIdentifier)).Returns(nameIdentifier);
         }
 
         [Fact]
@@ -74,10 +86,7 @@ namespace LAAuto.Tests.Controllers
         public async Task GetCreateService_ReturnViewWithService()
         {
             #region Arrange
-            var categories = new List<Category>()
-            {
-
-            };
+            var categories = new List<Category>();
 
             categoryServiceMock.Setup(x => x.ListCategoriesAsync(
                     It.IsAny<Guid?>()))
@@ -106,6 +115,173 @@ namespace LAAuto.Tests.Controllers
             var model = expected.Model as CreateServiceRequest;
 
             Assert.NotNull(model);
+            #endregion
+        }
+
+        [Fact]
+        public async Task CreateService_RedirectsToListServices()
+        {
+            #region Arrange
+
+            var request = new CreateServiceRequest()
+            {
+                UserId = Guid.NewGuid(),
+                OpenTime = TimeOnly.MinValue.ToString(),
+                CloseTime = TimeOnly.MaxValue.ToString(),
+                Description = "Description",
+                Name = "Name",
+                Location = "TestLocation",
+                Categories = new List<SelectCategoryViewModel>()
+                {
+                    new SelectCategoryViewModel()
+                    {
+                        IsSelected= true,
+                    }
+                },
+            };
+
+            var categories = new List<Category>();
+
+            categoryServiceMock.Setup(x => x.ListCategoriesAsync(
+                    It.IsAny<Guid?>()))
+                .Returns(Task.FromResult(categories));
+
+            #endregion
+
+            #region Act
+            var context = new ControllerContext(new ActionContext(httpContextMock.Object, new RouteData(), new ControllerActionDescriptor()));
+
+            var controller = new ServiceController
+               (serviceServiceMock.Object, userServiceMock.Object, categoryServiceMock.Object, hostEnvironmentMock.Object)
+            {
+                ControllerContext = context
+            };
+
+            var result = controller.Create(request);
+
+            #endregion
+
+            #region Assert
+
+            Assert.NotNull(result);
+
+            var expected = await result as RedirectToActionResult;
+
+            Assert.NotNull(expected);
+
+            Assert.Equal("Mine", expected.ActionName);
+
+            #endregion
+        }
+
+        [Fact]
+        public async Task CreateService_ReturnsViewWithModelIfThereIsNoSelectedCategory()
+        {
+            #region Arrange
+
+            var request = new CreateServiceRequest()
+            {
+                UserId = Guid.NewGuid(),
+                OpenTime = TimeOnly.MinValue.ToString(),
+                CloseTime = TimeOnly.MaxValue.ToString(),
+                Description = "Description",
+                Name = "Name",
+                Location = "TestLocation",
+                Categories = new List<SelectCategoryViewModel>()
+                {
+                    new SelectCategoryViewModel()
+                    {
+                        IsSelected= false,
+                    }
+                },
+            };
+
+            var categories = new List<Category>();
+
+            categoryServiceMock.Setup(x => x.ListCategoriesAsync(
+                    It.IsAny<Guid?>()))
+                .Returns(Task.FromResult(categories));
+
+            #endregion
+
+            #region Act
+            var context = new ControllerContext(new ActionContext(httpContextMock.Object, new RouteData(), new ControllerActionDescriptor()));
+
+            var controller = new ServiceController
+               (serviceServiceMock.Object, userServiceMock.Object, categoryServiceMock.Object, hostEnvironmentMock.Object)
+            {
+                ControllerContext = context
+            };
+
+            var result = controller.Create(request);
+
+            #endregion
+
+            #region Assert
+
+            Assert.NotNull(result);
+
+            var expected = await result as ViewResult;
+
+            Assert.NotNull(expected);
+
+            Assert.IsType<CreateServiceRequest>(expected.Model);
+
+            #endregion
+        }
+        [Fact]
+        public async Task CreateService_ReturnsViewWithModelIfOpenTimeOrCloseTimeIsIncorrect()
+        {
+            #region Arrange
+
+            var request = new CreateServiceRequest()
+            {
+                UserId = Guid.NewGuid(),
+                OpenTime = TimeOnly.MaxValue.ToString(),
+                CloseTime = TimeOnly.MinValue.ToString(),
+                Description = "Description",
+                Name = "Name",
+                Location = "TestLocation",
+                Categories = new List<SelectCategoryViewModel>()
+                {
+                    new SelectCategoryViewModel()
+                    {
+                        IsSelected= true,
+                    }
+                },
+            };
+
+            var categories = new List<Category>();
+
+            categoryServiceMock.Setup(x => x.ListCategoriesAsync(
+                    It.IsAny<Guid?>()))
+                .Returns(Task.FromResult(categories));
+
+            #endregion
+
+            #region Act
+            var context = new ControllerContext(new ActionContext(httpContextMock.Object, new RouteData(), new ControllerActionDescriptor()));
+
+            var controller = new ServiceController
+               (serviceServiceMock.Object, userServiceMock.Object, categoryServiceMock.Object, hostEnvironmentMock.Object)
+            {
+                ControllerContext = context
+            };
+
+            var result = controller.Create(request);
+
+            #endregion
+
+            #region Assert
+
+            Assert.NotNull(result);
+
+            var expected = await result as ViewResult;
+
+            Assert.NotNull(expected);
+
+            Assert.IsType<CreateServiceRequest>(expected.Model);
+
             #endregion
         }
 
@@ -247,6 +423,28 @@ namespace LAAuto.Tests.Controllers
         }
 
         [Fact]
+        public async Task UpdateRating_ThrowslIfParameterIsNull()
+        {
+            #region Arrange
+
+            #endregion
+
+            #region Act
+
+            var controller = new ServiceController
+             (serviceServiceMock.Object, userServiceMock.Object, categoryServiceMock.Object, hostEnvironmentMock.Object);
+
+            #endregion
+
+            #region Assert
+
+            await Assert.ThrowsAsync<ArgumentNullException>(async ()
+               => await controller.UpdateRating(null));
+
+            #endregion
+        }
+
+        [Fact]
         public async Task DeleteService_RedirectsToListServices()
         {
             #region Arrange
@@ -276,5 +474,44 @@ namespace LAAuto.Tests.Controllers
 
             #endregion
         }
+
+        [Fact]
+        public async Task UpdateServiceRating_RedirectsToGetService()
+        {
+            #region Arrange
+
+            var request = new UpdateRatingRequest()
+            {
+                
+            };
+
+            #endregion
+
+            #region Act
+            var context = new ControllerContext(new ActionContext(httpContextMock.Object, new RouteData(), new ControllerActionDescriptor()));
+
+            var controller = new ServiceController
+               (serviceServiceMock.Object, userServiceMock.Object, categoryServiceMock.Object, hostEnvironmentMock.Object)
+            {
+                ControllerContext = context
+            };
+
+            var result = controller.UpdateRating(request);
+
+            #endregion
+
+            #region Assert
+
+            Assert.NotNull(result);
+
+            var expected = await result as RedirectToActionResult;
+
+            Assert.NotNull(expected);
+
+            Assert.Equal("Get", expected.ActionName);
+
+            #endregion
+        }
+
     }
 }

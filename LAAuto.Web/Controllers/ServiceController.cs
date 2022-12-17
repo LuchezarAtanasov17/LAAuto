@@ -110,7 +110,7 @@ namespace LAAuto.Web.Controllers
                 return View(request);
             }
 
-            request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            request.UserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var serviceRequest = Conversion.ConvertService(request);
 

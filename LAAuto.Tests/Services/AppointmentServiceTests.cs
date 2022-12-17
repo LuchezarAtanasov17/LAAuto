@@ -460,7 +460,7 @@ namespace LAAuto.Tests.Services
             Assert.Equal(ex.Message, $"Could not find appointment with ID {id}.");
 
             #endregion
-        }
+        }   
 
         [Fact]
         public async Task DeleteAppointment_ThrowsIfThereIsNoAppointmentWithThatId()
