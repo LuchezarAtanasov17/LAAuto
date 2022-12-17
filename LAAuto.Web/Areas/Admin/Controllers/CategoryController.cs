@@ -38,16 +38,16 @@ namespace LAAuto.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Create(
             CreateCategoryRequest request)
         {
-            if (request is null)
+            if (!ModelState.IsValid)
             {
-                throw new ArgumentNullException(nameof(request));
+                return View(request);
             }
 
             var categoryReqeust = Conversion.ConvertCreateCategoryRequest(request);
 
             await _categoryService.CreateCategoryAsync(categoryReqeust);
 
-            return Redirect(nameof(List));
+            return RedirectToAction(nameof(List));
         }
 
         public async Task<IActionResult> Delete(

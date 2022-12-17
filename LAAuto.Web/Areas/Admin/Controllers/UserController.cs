@@ -25,25 +25,5 @@ namespace LAAuto.Web.Areas.Admin.Controllers
 
             return View(users);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Get(
-            [FromQuery]
-            Guid id)
-        {
-            var userService = await _userService.GetUserAsync(id);
-
-            var user = Conversion.ConvertUser(userService);
-
-            return View(user);
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            await _userService.DeleteUserAsync(id);
-
-            return Redirect(nameof(List));
-        }
     }
 }

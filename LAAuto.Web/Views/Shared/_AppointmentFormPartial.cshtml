@@ -6,7 +6,8 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form enctype="multipart/form-data" method="post">
             <div class="mb-3">
-                <h4 class="form-label text-center">Create appointment for: @Model.Service.Name</h4>
+                <input type="hidden" asp-for="@Model.Service"/>
+                <h4 class="form-label text-center">Create appointment for: @Model.Service?.Name</h4>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.Description" class="form-label">Description</label>
@@ -16,7 +17,7 @@
             <div class="mb-3">
                 <label class="form-label">Category</label><br />
                         <select asp-for="@Model.CategoryId">
-                    @foreach (var category in Model.Service.Categories)
+                    @foreach (var category in Model.Service?.Categories)
                     {
                         <option value="@category.Id"> @category.Name</option>
                     }
@@ -36,7 +37,7 @@
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <input class="btn btn-primary" asp-controller="Appointment" asp-action="Create" asp-route-id="@Model.ServiceId" type="submit" value="Save" />
+                <input class="btn btn-primary" asp-controller="Appointment" asp-action="Create" asp-route-serviceId="@Model.ServiceId" type="submit" value="Save" />
                 <a class="btn btn-secondary" asp-controller="Appointment" asp-action="List">Cancel</a>
             </div>
         </form>

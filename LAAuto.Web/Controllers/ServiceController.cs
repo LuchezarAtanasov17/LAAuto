@@ -10,7 +10,7 @@ using SERVICES = LAAuto.Services.Services;
 
 namespace LAAuto.Web.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class ServiceController : Controller
     {
         private readonly SERVICES.IServiceService _serviceService;
@@ -56,12 +56,6 @@ namespace LAAuto.Web.Controllers
                 .Select(Conversion.ConvertService)
                 .ToList();
 
-            //TODO:
-            if (services.Count == 0)
-            {
-                return RedirectToAction(nameof(List));
-            }
-
             return View("List", services);
         }
 
@@ -106,7 +100,7 @@ namespace LAAuto.Web.Controllers
             {
                 ModelState.AddModelError(nameof(request.Categories), "You should select at least one category.");
             }
-            if (request.OpenTime == request.CloseTime)
+            if (request.OpenTime == request.CloseTime || DateTime.Parse(request.CloseTime) < DateTime.Parse(request.OpenTime))
             {
                 ModelState.AddModelError(nameof(request.CloseTime), "You should select correct open and close times.");
             }

@@ -1,14 +1,12 @@
-﻿using SERVICES = LAAuto.Services.Services;
-using CATEGORIES = LAAuto.Services.Categories;
-using APPOINTMENTS = LAAuto.Services.Appointments;
-using Microsoft.AspNetCore.Mvc;
-using LAAuto.Web.Models.Appointments;
+﻿using LAAuto.Web.Models.Appointments;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using SERVICES_MODELS = LAAuto.Web.Models.Services;
+using APPOINTMENTS = LAAuto.Services.Appointments;
+using CATEGORIES = LAAuto.Services.Categories;
 using CATEGORIES_MODELS = LAAuto.Web.Models.Categories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration.UserSecrets;
+using SERVICES = LAAuto.Services.Services;
+using SERVICES_MODELS = LAAuto.Web.Models.Services;
 
 namespace LAAuto.Web.Controllers
 {
@@ -19,7 +17,10 @@ namespace LAAuto.Web.Controllers
         private readonly SERVICES.IServiceService _serviceService;
         private readonly CATEGORIES.ICategoryService _categoryService;
 
-        public AppointmentController(APPOINTMENTS.IAppointmentService appointmentService, SERVICES.IServiceService serviceService, CATEGORIES.ICategoryService categoryService)
+        public AppointmentController(
+            APPOINTMENTS.IAppointmentService appointmentService, 
+            SERVICES.IServiceService serviceService, 
+            CATEGORIES.ICategoryService categoryService)
         {
             _appointmentService = appointmentService ?? throw new ArgumentNullException(nameof(appointmentService));
             _serviceService = serviceService ?? throw new ArgumentNullException(nameof(serviceService));
@@ -28,26 +29,24 @@ namespace LAAuto.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Mine()
+        public async Task<IActionResult> List(
+            Guid? serviceId = null,
+            Guid? userId = null)
         {
-            var serviceAppointments = await _appointmentService.ListAppointmentsAsync(userId: Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            Guid? userGuid = userId == null
+                ? null
+                : userId;
 
-            var appointments = serviceAppointments
+            var serviceAppointments = await _appointmentService.ListAppointmentsAsync(userId: userGuid, serviceId: serviceId);
+
+            List<AppointmentViewModel> appointments = serviceAppointments
                 .Select(Conversion.ConvertAppointment)
                 .ToList();
 
-            return View("List", appointments);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ListByService(
-            Guid serviceId)
-        {
-            var serviceAppointments = await _appointmentService.ListAppointmentsAsync(serviceId: serviceId);
-
-            var appointments = serviceAppointments
-                .Select(Conversion.ConvertAppointment)
-                .ToList();
+            if (userId != null)
+            {
+                return View("ListByUser", appointments);
+            }
 
             return View("ListByService", appointments);
         }
@@ -81,19 +80,19 @@ namespace LAAuto.Web.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(
-            Guid id,
+            Guid serviceId,
             CreateAppointmentRequest request)
         {
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
-            var service = await _serviceService.GetServiceAsync(id);
+            var service = await _serviceService.GetServiceAsync(serviceId);
 
-            request.ServiceId = id;
+            request.ServiceId = serviceId;
             request.Service = SERVICES_MODELS.Conversion.ConvertService(service);
 
-            request.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            request.UserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             request.StartDate = request.StartDate.AddHours(request.StartDateHour);
             request.EndDate = request.StartDate.AddHours(1);
 
@@ -111,11 +110,11 @@ namespace LAAuto.Web.Controllers
             }
 
             var appointmentRequest = Conversion.ConvertCreateAppointmentRequest(request);
-            appointmentRequest.ServiceId = id;
+            appointmentRequest.ServiceId = serviceId;
 
             await _appointmentService.CreateAppointmentAsync(appointmentRequest);
 
-            return RedirectToAction(nameof(Mine));
+            return RedirectToAction(nameof(List), new { userId = appointmentRequest.UserId });
         }
 
         [HttpGet]
@@ -152,7 +151,7 @@ namespace LAAuto.Web.Controllers
             var service = await _serviceService.GetServiceAsync(request.ServiceId);
             request.Service = SERVICES_MODELS.Conversion.ConvertService(service);
 
-            serviceRequest.UserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            serviceRequest.UserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             serviceRequest.StartDate = request.StartDate.AddHours(request.StartDateHour);
             serviceRequest.EndDate = serviceRequest.StartDate.AddHours(1);
 
@@ -168,7 +167,7 @@ namespace LAAuto.Web.Controllers
 
             await _appointmentService.UpdateAppointmentAsync(id, serviceRequest);
 
-            return RedirectToAction(nameof(Mine));
+            return RedirectToAction(nameof(List), new { userId = serviceRequest.UserId });
         }
 
         public async Task<IActionResult> Delete(
@@ -177,7 +176,17 @@ namespace LAAuto.Web.Controllers
         {
             await _appointmentService.DeleteAppointmentAsync(id);
 
-            return RedirectToAction(nameof(Mine));
+            return RedirectToAction(nameof(List));
+        }
+
+        public async Task<IActionResult> DeleteMyAppointment(
+           [FromRoute]
+            Guid id)
+        {
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            await _appointmentService.DeleteAppointmentAsync(id);
+
+            return RedirectToAction(nameof(List), new {userId = userId});
         }
     }
 }

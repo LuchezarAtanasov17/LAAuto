@@ -18,7 +18,6 @@ namespace LAAuto.Web.Models.Appointments
 
         public Guid CategoryId { get; set; }
 
-        //TODO: Validation with error messages
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }

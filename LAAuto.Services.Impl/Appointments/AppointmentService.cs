@@ -47,7 +47,6 @@ namespace LAAuto.Services.Impl.Appointments
 
         public async Task<Appointment> GetAppointmentAsync(Guid id)
         {
-            //TODO: Include Service, User
             var entity = await _context.Appointments
                 .Include(x => x.Service)
                 .Include(x=> x.User)
@@ -110,7 +109,7 @@ namespace LAAuto.Services.Impl.Appointments
 
             if (entity is null)
             {
-                throw new ObjectNotFoundException($"Could not find an appointment with ID {id}");
+                throw new ObjectNotFoundException($"Could not find an appointment with ID {id}.");
             }
 
             _context.Remove(entity);

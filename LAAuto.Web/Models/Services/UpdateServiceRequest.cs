@@ -19,8 +19,10 @@ namespace LAAuto.Web.Models.Services
         [StringLength(80, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
         public string Location { get; set; } = null!;
 
+        [Required]
         public string OpenTime { get; set; }
 
+        [Required]
         public string CloseTime { get; set; }
         public IFormFile? Image { get; set; }
 

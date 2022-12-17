@@ -20,16 +20,16 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 justify-content-left">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Service" asp-action="List">Services</a>
-                        </li>
                         @if (this.User?.Identity != null && this.User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Service" asp-action="List">Services</a>
+                            </li>
                             <li class="nav-item justify-content-left">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Service" asp-action="Mine">My Services</a>
                             </li>
                             <li class="nav-item justify-content-left">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Appointment" asp-action="Mine">My appointments</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Appointment" asp-action="List" asp-route-userId="@Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))">My appointments</a>
                             </li>
                             @if (this.User.IsInRole("Administrator"))
                             {
